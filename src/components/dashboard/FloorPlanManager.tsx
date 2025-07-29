@@ -78,6 +78,19 @@ export const FloorPlanManager: React.FC<FloorPlanManagerProps> = ({ currentUser 
     }
   };
 
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      const result = await floorPlanAPI.updateFloorPlanStatus(id, newStatus);
+      if (result.success) {
+        loadFloorPlans(); // Refresh the list
+      } else {
+        setError('Failed to update floor plan status');
+      }
+    } catch (err) {
+      setError('Failed to update floor plan status');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -128,7 +141,17 @@ export const FloorPlanManager: React.FC<FloorPlanManagerProps> = ({ currentUser 
           <div key={floorPlan.id} className="bg-white rounded-lg shadow-md p-6 border">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-semibold">{floorPlan.name}</h3>
-              <span className="text-sm text-gray-500">v{floorPlan.version}</span>
+              <div className="flex flex-col items-end">
+                <span className="text-sm text-gray-500">v{floorPlan.version}</span>
+                <span className={`text-xs px-2 py-1 rounded mt-1 ${
+                  floorPlan.status === 'published' ? 'bg-green-100 text-green-800' :
+                  floorPlan.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                  floorPlan.status === 'archived' ? 'bg-gray-100 text-gray-800' :
+                  'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {floorPlan.status || 'draft'}
+                </span>
+              </div>
             </div>
             
             <p className="text-gray-600 mb-4">
@@ -160,16 +183,40 @@ export const FloorPlanManager: React.FC<FloorPlanManagerProps> = ({ currentUser 
               <div>Modified: {new Date(floorPlan.last_modified).toLocaleDateString()}</div>
             </div>
 
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => viewFloorPlanDetails(floorPlan.id)}
-                className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-3 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white text-xs font-bold py-1 px-2 rounded"
               >
                 View Details
               </button>
+              {floorPlan.status !== 'published' && (
+                <button
+                  onClick={() => handleStatusChange(floorPlan.id, 'published')}
+                  className="bg-green-500 hover:bg-green-700 text-white text-xs font-bold py-1 px-2 rounded"
+                >
+                  Publish
+                </button>
+              )}
+              {floorPlan.status !== 'active' && floorPlan.status !== 'published' && (
+                <button
+                  onClick={() => handleStatusChange(floorPlan.id, 'active')}
+                  className="bg-blue-500 hover:bg-blue-700 text-white text-xs font-bold py-1 px-2 rounded"
+                >
+                  Activate
+                </button>
+              )}
+              {(floorPlan.status === 'published' || floorPlan.status === 'active') && (
+                <button
+                  onClick={() => handleStatusChange(floorPlan.id, 'draft')}
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white text-xs font-bold py-1 px-2 rounded"
+                >
+                  Draft
+                </button>
+              )}
               <button
                 onClick={() => handleDeleteFloorPlan(floorPlan.id)}
-                className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-1 px-3 rounded"
+                className="bg-red-500 hover:bg-red-700 text-white text-xs font-bold py-1 px-2 rounded"
               >
                 Delete
               </button>
@@ -214,6 +261,7 @@ const CreateFloorPlanModal: React.FC<CreateFloorPlanModalProps> = ({ onSubmit, o
     description: '',
     event_id: '',
     floor: 1,
+    status: 'draft'
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -267,7 +315,7 @@ const CreateFloorPlanModal: React.FC<CreateFloorPlanModalProps> = ({ onSubmit, o
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Floor Number
             </label>
@@ -278,6 +326,21 @@ const CreateFloorPlanModal: React.FC<CreateFloorPlanModalProps> = ({ onSubmit, o
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
               min="1"
             />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Status
+            </label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({...formData, status: e.target.value})}
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            >
+              <option value="draft">Draft</option>
+              <option value="active">Active</option>
+              <option value="published">Published</option>
+            </select>
           </div>
 
           <div className="flex justify-end space-x-2">
@@ -324,6 +387,16 @@ const FloorPlanDetailsModal: React.FC<FloorPlanDetailsModalProps> = ({ floorPlan
               <div><strong>Event ID:</strong> {floorPlan.event_id || 'N/A'}</div>
               <div><strong>Floor:</strong> {floorPlan.floor}</div>
               <div><strong>Version:</strong> {floorPlan.version}</div>
+              <div><strong>Status:</strong> 
+                <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                  floorPlan.status === 'published' ? 'bg-green-100 text-green-800' :
+                  floorPlan.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                  floorPlan.status === 'archived' ? 'bg-gray-100 text-gray-800' :
+                  'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {floorPlan.status || 'draft'}
+                </span>
+              </div>
               <div><strong>Created:</strong> {new Date(floorPlan.created).toLocaleString()}</div>
               <div><strong>Last Modified:</strong> {new Date(floorPlan.last_modified).toLocaleString()}</div>
             </div>

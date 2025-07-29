@@ -77,8 +77,8 @@ export const BackgroundUpload: React.FC<BackgroundUploadProps> = ({ onClose }) =
       // Reset the canvas to ensure it's clean for the new floor plan
       resetCanvas();
       
-      // Navigate to the new floor plan page
-      navigate('/floor-plans/new');
+      // Navigate to the admin floor plan editor
+      navigate('/admin/floor-plans/new');
     } else {
       // If no background image, just close the modal
       onClose?.();

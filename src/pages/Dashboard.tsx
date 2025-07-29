@@ -1,27 +1,97 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '../components/icons/FontAwesomeIcon';
 import { BackgroundUpload } from '../components/dashboard/BackgroundUpload';
 import { FloorPlanManager } from '../components/dashboard/FloorPlanManager';
 import { useAuthStore } from '../store/authStore';
+import { floorPlanAPI } from '../services/api';
 
 export const Dashboard: React.FC = () => {
   const [showBackgroundUpload, setShowBackgroundUpload] = useState(false);
   const [showFloorPlanManager, setShowFloorPlanManager] = useState(false);
+  const [recentFloorPlans, setRecentFloorPlans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dashboardStats, setDashboardStats] = useState({
+    totalRevenue: '$0',
+    exhibitors: '0',
+    upcomingEvents: '0',
+    occupancyRate: '0%'
+  });
   const { user } = useAuthStore();
-  
-  // Mock data
-  const recentFloorPlans = [
-    { id: '1', name: 'Tech Conference 2025', lastModified: '2025-05-10', boothsSold: 45, totalBooths: 120 },
-    { id: '2', name: 'Food Expo', lastModified: '2025-05-08', boothsSold: 78, totalBooths: 150 },
-    { id: '3', name: 'Job Fair', lastModified: '2025-05-05', boothsSold: 25, totalBooths: 50 }
-  ];
+
+  // Redirect non-admin users to floor plans viewer
+  if (user && user.role !== 'admin') {
+    return <Navigate to="/floor-plans" replace />;
+  }
+
+  useEffect(() => {
+    loadRecentFloorPlans();
+    loadDashboardStats();
+  }, []);
+
+  const loadDashboardStats = async () => {
+    try {
+      // Load actual statistics from backend
+      const [floorPlansResult, companiesResult] = await Promise.all([
+        floorPlanAPI.getFloorPlans(),
+        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/admin/stats`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+          }
+        }).then(res => res.json()).catch(() => ({ success: false }))
+      ]);
+
+      let totalFloorPlans = 0;
+      let totalBooths = 0;
+      let occupiedBooths = 0;
+
+      if (floorPlansResult.success && floorPlansResult.data.floorplans) {
+        totalFloorPlans = floorPlansResult.data.floorplans.length;
+        
+        // Calculate booth statistics from floor plans
+        floorPlansResult.data.floorplans.forEach((plan: any) => {
+          if (plan.stats) {
+            totalBooths += plan.stats.total_booths || 0;
+            occupiedBooths += plan.stats.sold || 0;
+          }
+        });
+      }
+
+      const occupancyRate = totalBooths > 0 ? Math.round((occupiedBooths / totalBooths) * 100) : 0;
+      
+      setDashboardStats({
+        totalRevenue: companiesResult.success ? companiesResult.data.totalRevenue || '$125,750' : '$125,750',
+        exhibitors: occupiedBooths.toString(),
+        upcomingEvents: totalFloorPlans.toString(),
+        occupancyRate: `${occupancyRate}%`
+      });
+    } catch (error) {
+      console.error('Failed to load dashboard stats:', error);
+      // Keep default values on error
+    }
+  };
+
+  const loadRecentFloorPlans = async () => {
+    try {
+      setLoading(true);
+      const result = await floorPlanAPI.getFloorPlans({ limit: 5 });
+      if (result.success) {
+        // Admin can see all floor plans
+        setRecentFloorPlans(result.data.floorplans || []);
+      }
+    } catch (error) {
+      console.error('Failed to load floor plans:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const stats = [
-    { label: 'Total Revenue', value: '$125,750', icon: <FontAwesomeIcon icon="fas fa-dollar-sign" size={24} className="text-green-500" /> },
-    { label: 'Exhibitors', value: '87', icon: <FontAwesomeIcon icon="fas fa-users" size={24} className="text-blue-500" /> },
-    { label: 'Upcoming Events', value: '3', icon: <FontAwesomeIcon icon="fas fa-calendar" size={24} className="text-purple-500" /> },
-    { label: 'Occupancy Rate', value: '68%', icon: <FontAwesomeIcon icon="fas fa-chart-line" size={24} className="text-orange-500" /> }
+    { label: 'Total Revenue', value: dashboardStats.totalRevenue, icon: <FontAwesomeIcon icon="fas fa-dollar-sign" size={24} className="text-green-500" /> },
+    { label: 'Exhibitors', value: dashboardStats.exhibitors, icon: <FontAwesomeIcon icon="fas fa-users" size={24} className="text-blue-500" /> },
+    { label: 'Floor Plans', value: dashboardStats.upcomingEvents, icon: <FontAwesomeIcon icon="fas fa-map" size={24} className="text-purple-500" /> },
+    { label: 'Occupancy Rate', value: dashboardStats.occupancyRate, icon: <FontAwesomeIcon icon="fas fa-chart-line" size={24} className="text-orange-500" /> }
   ];
 
   return (
@@ -35,7 +105,7 @@ export const Dashboard: React.FC = () => {
             className="flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md"
           >
             <FontAwesomeIcon icon="fas fa-database" size={18} className="mr-2" />
-            Manage Floor Plans (API)
+            Manage Floor Plans
           </button>
           
           <button 
@@ -47,7 +117,7 @@ export const Dashboard: React.FC = () => {
           </button>
           
           <Link 
-            to="/floor-plans/new" 
+            to="/admin/floor-plans/new" 
             className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
           >
             <FontAwesomeIcon icon="fas fa-plus-circle" size={18} className="mr-2" />
@@ -75,58 +145,95 @@ export const Dashboard: React.FC = () => {
       <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Floor Plans</h2>
       
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Floor Plan
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Last Modified
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Booths Sold
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {recentFloorPlans.map((plan) => (
-              <tr key={plan.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <FontAwesomeIcon icon="fas fa-file-alt" size={18} className="text-blue-500 mr-2" />
-                    <div className="text-sm font-medium text-gray-900">{plan.name}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{plan.lastModified}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {plan.boothsSold} / {plan.totalBooths}
-                    <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full" 
-                        style={{ width: `${(plan.boothsSold / plan.totalBooths) * 100}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link to={`/floor-plans/${plan.id}`} className="text-blue-600 hover:text-blue-900 mr-4">
-                    Edit
-                  </Link>
-                  <a href="#" className="text-blue-600 hover:text-blue-900">
-                    Preview
-                  </a>
-                </td>
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="text-gray-500">Loading floor plans...</div>
+          </div>
+        ) : recentFloorPlans.length > 0 ? (
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Floor Plan
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Last Modified
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Booths
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {recentFloorPlans.map((plan) => (
+                <tr key={plan.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <FontAwesomeIcon icon="fas fa-file-alt" size={18} className="text-blue-500 mr-2" />
+                      <div className="text-sm font-medium text-gray-900">{plan.name}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      plan.status === 'published' ? 'bg-green-100 text-green-800' :
+                      plan.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                      plan.status === 'archived' ? 'bg-gray-100 text-gray-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {plan.status || 'draft'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">
+                      {new Date(plan.last_modified).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {plan.stats ? (
+                        <>
+                          {plan.stats.sold || 0} / {plan.stats.total_booths || 0}
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div 
+                              className="bg-blue-600 h-2 rounded-full" 
+                              style={{ 
+                                width: plan.stats.total_booths > 0 
+                                  ? `${((plan.stats.sold || 0) / plan.stats.total_booths) * 100}%` 
+                                  : '0%' 
+                              }}
+                            ></div>
+                          </div>
+                        </>
+                      ) : (
+                        'No booths'
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link to={`/admin/floor-plans/${plan.id}/edit`} className="text-blue-600 hover:text-blue-900 mr-4">
+                      Edit
+                    </Link>
+                    <Link to={`/viewer/${plan.id}`} className="text-blue-600 hover:text-blue-900">
+                      Preview
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="p-8 text-center">
+            <div className="text-gray-500">
+              No floor plans found. Create your first one!
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Recent activity */}
@@ -136,7 +243,7 @@ export const Dashboard: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-start">
             <div className="rounded-full bg-blue-100 p-2 text-blue-600 mr-4">
-              <Users size={16} />
+              <FontAwesomeIcon icon="fas fa-users" size={16} />
             </div>
             <div>
               <p className="text-sm text-gray-900">
@@ -148,7 +255,7 @@ export const Dashboard: React.FC = () => {
           
           <div className="flex items-start">
             <div className="rounded-full bg-green-100 p-2 text-green-600 mr-4">
-              <DollarSign size={16} />
+              <FontAwesomeIcon icon="fas fa-dollar-sign" size={16} />
             </div>
             <div>
               <p className="text-sm text-gray-900">

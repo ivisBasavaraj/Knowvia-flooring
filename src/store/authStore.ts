@@ -22,11 +22,11 @@ const getDefaultPermissions = (role: string) => {
     };
   } else {
     return {
-      floorPlans: { create: true, read: true, update: true, delete: false },
-      booths: { create: true, read: true, update: true, delete: true },
+      floorPlans: { create: false, read: true, update: false, delete: false },
+      booths: { create: false, read: true, update: false, delete: false },
       users: { create: false, read: true, update: false, delete: false },
       settings: { create: false, read: true, update: false, delete: false },
-      reports: { create: true, read: true, update: true, delete: false }
+      reports: { create: false, read: true, update: false, delete: false }
     };
   }
 };

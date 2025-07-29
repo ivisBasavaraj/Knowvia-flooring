@@ -130,6 +130,9 @@ export interface BoothElement extends BaseCanvasElement {
     metric: string;
   };
   exhibitor?: ExhibitorInfo;
+  image?: string; // Booth image URL
+  website?: string; // Booth/exhibitor website
+  description?: string; // Booth description
 }
 
 export interface DoorElement extends BaseCanvasElement {

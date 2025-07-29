@@ -11,9 +11,10 @@ import { PathSelector } from '../canvas/PathSelector';
 
 interface ViewMode2DProps {
   onBoothClick: (boothId: string) => void;
+  selectedBoothId?: string;
 }
 
-export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick }) => {
+export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBoothId }) => {
   const stageRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -180,7 +181,7 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick }) => {
                   <ElementRenderer
                     key={element.id}
                     element={element}
-                    isSelected={false}
+                    isSelected={element.id === selectedBoothId}
                     snapToGrid={false}
                     gridSize={grid.size}
                   />

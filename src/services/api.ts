@@ -107,6 +107,7 @@ export const floorPlanAPI = {
     floor?: number;
     layer?: number;
     state?: any;
+    status?: string;
   }) {
     const response = await fetch(`${API_BASE_URL}/floorplans`, {
       method: 'POST',
@@ -123,6 +124,7 @@ export const floorPlanAPI = {
     event_id?: string;
     floor?: number;
     layer?: number;
+    status?: string;
   }) {
     const response = await fetch(`${API_BASE_URL}/floorplans/${id}`, {
       method: 'PUT',
@@ -140,11 +142,79 @@ export const floorPlanAPI = {
     return { success: response.ok, data: await response.json() };
   },
 
+  async updateFloorPlanStatus(id: string, status: string) {
+    const response = await fetch(`${API_BASE_URL}/floorplans/${id}/status`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status }),
+    });
+    return { success: response.ok, data: await response.json() };
+  },
+
   async getBoothDetails(id: string) {
     const response = await fetch(`${API_BASE_URL}/floorplans/${id}/booths`, {
       headers: getAuthHeaders(),
     });
     return { success: response.ok, data: await response.json() };
+  },
+};
+
+// Public API (no authentication required)
+export const publicFloorPlanAPI = {
+  async getPublicFloorPlans(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    event_id?: string;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.set('page', params.page.toString());
+    if (params?.limit) queryParams.set('limit', params.limit.toString());
+    if (params?.search) queryParams.set('search', params.search);
+    if (params?.event_id) queryParams.set('event_id', params.event_id);
+
+    const response = await fetch(
+      `${API_BASE_URL}/public/floorplans?${queryParams}`,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    const data = await response.json();
+    return { success: response.ok, data };
+  },
+
+  async getPublicFloorPlan(id: string) {
+    const response = await fetch(`${API_BASE_URL}/public/floorplans/${id}`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await response.json();
+    return { success: response.ok, data };
+  },
+
+  async getPublicCompanies(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    floor?: number;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.set('page', params.page.toString());
+    if (params?.limit) queryParams.set('limit', params.limit.toString());
+    if (params?.search) queryParams.set('search', params.search);
+    if (params?.floor) queryParams.set('floor', params.floor.toString());
+
+    const response = await fetch(
+      `${API_BASE_URL}/public/companies?${queryParams}`,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    const data = await response.json();
+    return { success: response.ok, data };
+  },
+
+  async getPublicSponsors() {
+    const response = await fetch(`${API_BASE_URL}/public/sponsors`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await response.json();
+    return { success: response.ok, data };
   },
 };
 

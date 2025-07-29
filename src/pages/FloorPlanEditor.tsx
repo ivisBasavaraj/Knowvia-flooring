@@ -23,6 +23,9 @@ export const FloorPlanEditor: React.FC = () => {
   const [showFloorPlanManager, setShowFloorPlanManager] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string>('');
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [floorPlanName, setFloorPlanName] = useState(`Floor Plan ${new Date().toLocaleDateString()}`);
+  const [floorPlanStatus, setFloorPlanStatus] = useState<'draft' | 'active' | 'published'>('published');
   
   // Effect to create a sample booth when the editor loads
   useEffect(() => {
@@ -173,13 +176,15 @@ export const FloorPlanEditor: React.FC = () => {
 
     setIsSaving(true);
     setSaveStatus('Saving...');
+    setShowSaveDialog(false);
 
     try {
       const floorPlanData = {
-        name: `Floor Plan ${new Date().toLocaleDateString()}`,
+        name: floorPlanName,
         description: 'Created with IMTMA Flooring Editor',
         event_id: 'imtma_2024',
         floor: 1,
+        status: floorPlanStatus,
         state: {
           elements: elements.map(el => ({
             ...el,
@@ -300,111 +305,13 @@ export const FloorPlanEditor: React.FC = () => {
           
           <button 
             className="flex items-center space-x-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors"
-            onClick={saveFloorPlan}
+            onClick={() => setShowSaveDialog(true)}
             disabled={isSaving}
           >
             <FontAwesomeIcon icon="fas fa-save" size={16} />
-            <span>{isSaving ? 'Saving...' : 'Save to Backend'}</span>
+            <span>Save Floor Plan</span>
           </button>
           
-          <button 
-            className="flex items-center space-x-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md text-sm transition-colors"
-            onClick={() => {
-              // Add various test elements to showcase icon scaling
-              const testElements = [
-                // Small booth
-                {
-                  type: 'booth',
-                  x: 100,
-                  y: 100,
-                  width: 60,
-                  height: 40,
-                  rotation: 0,
-                  fill: '#FFE4B5',
-                  stroke: '#FFA500',
-                  strokeWidth: 2,
-                  draggable: true,
-                  layer: 1,
-                  customProperties: {},
-                  number: `S-${Math.floor(Math.random() * 10)}`,
-                  status: 'available',
-                  dimensions: { imperial: '6\' x 4\'', metric: '2m x 1.2m' }
-                },
-                // Medium booth
-                {
-                  type: 'booth',
-                  x: 200,
-                  y: 100,
-                  width: 120,
-                  height: 80,
-                  rotation: 0,
-                  fill: '#FFE4B5',
-                  stroke: '#FFA500',
-                  strokeWidth: 2,
-                  draggable: true,
-                  layer: 1,
-                  customProperties: {},
-                  number: `M-${Math.floor(Math.random() * 10)}`,
-                  status: 'reserved',
-                  dimensions: { imperial: '12\' x 8\'', metric: '3.6m x 2.4m' }
-                },
-                // Large booth
-                {
-                  type: 'booth',
-                  x: 350,
-                  y: 100,
-                  width: 180,
-                  height: 120,
-                  rotation: 0,
-                  fill: '#FFE4B5',
-                  stroke: '#FFA500',
-                  strokeWidth: 2,
-                  draggable: true,
-                  layer: 1,
-                  customProperties: {},
-                  number: `L-${Math.floor(Math.random() * 10)}`,
-                  status: 'sold',
-                  dimensions: { imperial: '18\' x 12\'', metric: '5.4m x 3.6m' }
-                }
-              ];
-              
-              // Add all test elements
-              testElements.forEach(element => {
-                addElement(element as Omit<BoothElement, 'id' | 'selected'>);
-              });
-            }}
-          >
-            <span>🧪 Test Icon Scaling</span>
-          </button>
-          
-          <button 
-            className="flex items-center space-x-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm transition-colors"
-            onClick={() => {
-              // Add various element types to test all icons
-              const elementTypes = [
-                { type: 'furniture', furnitureType: 'meeting-room', width: 80, height: 60, x: 100, y: 250 },
-                { type: 'furniture', furnitureType: 'restroom', width: 60, height: 60, x: 200, y: 250 },
-                { type: 'furniture', furnitureType: 'medical', width: 70, height: 50, x: 280, y: 250 },
-                { type: 'door', furnitureType: 'emergency', width: 40, height: 80, x: 100, y: 350 },
-                { type: 'plant', width: 50, height: 50, x: 160, y: 350 },
-              ];
-              
-              elementTypes.forEach(elem => {
-                addElement({
-                  ...elem,
-                  rotation: 0,
-                  fill: '#F5F5F5',
-                  stroke: '#666',
-                  strokeWidth: 1,
-                  draggable: true,
-                  layer: 1,
-                  customProperties: {}
-                } as any);
-              });
-            }}
-          >
-            <span>🎨 Test All Icons</span>
-          </button>
           
           <button 
             className="flex items-center space-x-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors"
@@ -453,6 +360,68 @@ export const FloorPlanEditor: React.FC = () => {
               </button>
             </div>
             <FloorPlanManager currentUser={user} />
+          </div>
+        </div>
+      )}
+
+      {/* Save Dialog */}
+      {showSaveDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Save Floor Plan</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Floor Plan Name
+                  </label>
+                  <input
+                    type="text"
+                    value={floorPlanName}
+                    onChange={(e) => setFloorPlanName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter floor plan name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Status
+                  </label>
+                  <select
+                    value={floorPlanStatus}
+                    onChange={(e) => setFloorPlanStatus(e.target.value as 'draft' | 'active' | 'published')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="draft">Draft (Admin only)</option>
+                    <option value="active">Active (Visible to users)</option>
+                    <option value="published">Published (Public access)</option>
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {floorPlanStatus === 'draft' && 'Only admins can see this floor plan'}
+                    {floorPlanStatus === 'active' && 'Logged-in users can view this floor plan'}
+                    {floorPlanStatus === 'published' && 'Anyone can view this floor plan in 2D/3D viewer'}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  onClick={() => setShowSaveDialog(false)}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveFloorPlan}
+                  disabled={!floorPlanName.trim() || isSaving}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaving ? 'Saving...' : 'Save Floor Plan'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

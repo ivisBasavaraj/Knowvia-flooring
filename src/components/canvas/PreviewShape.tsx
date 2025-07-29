@@ -110,15 +110,6 @@ export const PreviewShape: React.FC<PreviewShapeProps> = ({ tool, start, end }) 
         iconPath = IconPaths.text;
         iconColor = IconColors.text;
         break;
-      // New element types
-      case 'meeting':
-        iconPath = IconPaths.meeting;
-        iconColor = IconColors.meeting;
-        break;
-      case 'restroom':
-        iconPath = IconPaths.restroom;
-        iconColor = IconColors.restroom;
-        break;
       case 'emergency':
         iconPath = IconPaths.emergency;
         iconColor = IconColors.emergency;

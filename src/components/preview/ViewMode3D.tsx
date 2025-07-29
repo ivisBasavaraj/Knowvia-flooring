@@ -8,9 +8,10 @@ import { PathControls } from '../canvas/PathControls';
 
 interface ViewMode3DProps {
   onBoothClick: (boothId: string) => void;
+  selectedBoothId?: string;
 }
 
-export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick }) => {
+export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick, selectedBoothId }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { elements, grid } = useCanvasStore();
   const [isLoading, setIsLoading] = useState(true);
@@ -162,29 +163,36 @@ export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick }) => {
           // Create booth mesh
           const boothGeometry = new THREE.BoxGeometry(booth.width, 40, booth.height);
           
-          // Determine color based on booth status
+          // Determine color based on booth status and selection
           let color;
-          switch (booth.status) {
-            case 'available':
-              color = 0x4caf50; // Green
-              break;
-            case 'reserved':
-              color = 0xff9800; // Orange
-              break;
-            case 'sold':
-              color = 0xf44336; // Red
-              break;
-            case 'on-hold':
-              color = 0x2196f3; // Blue
-              break;
-            default:
-              color = 0xffffff; // White
+          let isSelected = selectedBoothId === booth.id;
+          
+          if (isSelected) {
+            color = 0xffeb3b; // Bright yellow for selected booth
+          } else {
+            switch (booth.status) {
+              case 'available':
+                color = 0x4caf50; // Green
+                break;
+              case 'reserved':
+                color = 0xff9800; // Orange
+                break;
+              case 'sold':
+                color = 0xf44336; // Red
+                break;
+              case 'on-hold':
+                color = 0x2196f3; // Blue
+                break;
+              default:
+                color = 0xffffff; // White
+            }
           }
           
           const boothMaterial = new THREE.MeshStandardMaterial({
             color,
             transparent: true,
-            opacity: 0.8,
+            opacity: isSelected ? 1.0 : 0.8,
+            emissive: isSelected ? 0x444400 : 0x000000, // Add glow effect for selected booth
           });
           
           mesh = new THREE.Mesh(boothGeometry, boothMaterial);
@@ -508,7 +516,7 @@ export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick }) => {
       // Dispose resources
       renderer.dispose();
     };
-  }, [elements, onBoothClick, pathMode, handleBoothSelect]);
+  }, [elements, onBoothClick, pathMode, handleBoothSelect, selectedBoothId]);
   
   // Effect to update path visualization when path points change
   useEffect(() => {

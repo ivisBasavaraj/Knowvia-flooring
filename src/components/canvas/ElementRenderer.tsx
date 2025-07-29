@@ -13,7 +13,6 @@ import {
 } from '../../types/canvas';
 import { IconPaths, IconColors } from '../icons/IconPaths';
 import { FontAwesomeIconPaths, FontAwesomeIconColors, ToolToFontAwesome } from '../icons/FontAwesomeToSVG';
-import { renderFontAwesomeIcon, EnhancedFontAwesomeIconPaths } from '../icons/FontAwesomeCanvasRenderer';
 
 interface ElementRendererProps {
   element: AnyCanvasElement;
@@ -172,8 +171,8 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     }
   };
   
-  // Enhanced helper function to render Font Awesome icons with better consistency
-  const renderIcon = (element: AnyCanvasElement, iconName: string, iconColor?: string): JSX.Element | null => {
+  // Enhanced helper function to render a high-quality, auto-scaling icon
+  const renderIcon = (element: AnyCanvasElement, iconPath: string, iconColor?: string): JSX.Element | null => {
     // Dynamic sizing based on element size - more responsive
     const minElementSize = Math.min(element.width, element.height);
     const maxElementSize = Math.max(element.width, element.height);
@@ -208,6 +207,10 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     // Ensure visibility with better minimum sizes
     iconSize = Math.max(iconSize, 14);
     
+    // Calculate scale factor from the 40x40 base viewBox
+    const baseSize = 40;
+    const scale = iconSize / baseSize;
+    
     // Center the icon in the element
     const xPos = (element.width - iconSize) / 2;
     const yPos = (element.height - iconSize) / 2;
@@ -215,25 +218,45 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     // Enhanced color selection with better defaults
     const defaultColor = iconColor || element.stroke || "#333333";
     
+    // Smart stroke detection - look for common SVG path patterns
+    const hasClosedPaths = iconPath.includes('Z');
+    const hasLineCommands = iconPath.includes('L') || iconPath.includes('Q') || iconPath.includes('C');
+    const isStrokeBased = hasLineCommands && !hasClosedPaths;
+    
+    // Adaptive stroke width based on icon size
+    const strokeWidth = Math.max(scale * 1.5, 1);
+    
     try {
-      return renderFontAwesomeIcon(
-        iconName,
-        xPos,
-        yPos,
-        iconSize,
-        iconSize,
-        defaultColor
+      return (
+        <Path
+          x={xPos}
+          y={yPos}
+          data={iconPath}
+          fill={isStrokeBased ? 'transparent' : defaultColor}
+          stroke={isStrokeBased ? defaultColor : undefined}
+          strokeWidth={isStrokeBased ? strokeWidth : 0}
+          scaleX={scale}
+          scaleY={scale}
+          perfectDrawEnabled={true} // Enable perfect drawing for crisp edges
+          listening={false} // Optimize performance by disabling event listening on the icon
+          shadowForStrokeEnabled={false} // Disable shadow for better performance
+          hitStrokeWidth={0} // Optimize hit detection
+          lineCap="round" // Smooth line endings
+          lineJoin="round" // Smooth line joins
+          tension={0.5} // Add slight curve tension for smoother appearance
+          visible={true} // Force visibility
+        />
       );
     } catch (error) {
-      console.error("Error rendering Font Awesome icon:", error);
+      console.error("Error rendering icon:", error);
       // Fallback to a simple visible shape if there's an error
       return (
         <Rect
           x={xPos}
           y={yPos}
-          width={iconSize}
-          height={iconSize}
-          fill={defaultColor}
+          width={baseSize * scale}
+          height={baseSize * scale}
+          fill={color}
           opacity={0.5}
           cornerRadius={5}
         />
@@ -279,7 +302,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
         />
         
         {/* Booth icon with proper scaling */}
-        {renderIcon(booth, 'fas fa-th-large', FontAwesomeIconColors['fas fa-th-large'])}
+        {renderIcon(booth, FontAwesomeIconPaths['fas fa-th-large'], FontAwesomeIconColors['fas fa-th-large'])}
         
         {/* Booth number with adaptive sizing */}
         {booth.width > 40 && booth.height > 25 && (
@@ -437,7 +460,7 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
   
   const renderFurniture = (furniture: FurnitureElement) => {
     // Determine which icon to use based on furniture type
-    let iconToUse = 'fas fa-couch'; // Default furniture icon
+    let iconToUse = FontAwesomeIconPaths['fas fa-couch']; // Default furniture icon
     let iconColor = furniture.stroke || FontAwesomeIconColors['fas fa-couch'];
     
     // Get the furniture type
@@ -446,51 +469,51 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
     // Check if we have a Font Awesome mapping for this furniture type
     if (furnitureType in ToolToFontAwesome) {
       const fontAwesomeIcon = ToolToFontAwesome[furnitureType];
-      if (fontAwesomeIcon in FontAwesomeIconColors) {
-        iconToUse = fontAwesomeIcon;
+      if (fontAwesomeIcon in FontAwesomeIconPaths) {
+        iconToUse = FontAwesomeIconPaths[fontAwesomeIcon];
         iconColor = FontAwesomeIconColors[fontAwesomeIcon] || (furniture.stroke || FontAwesomeIconColors['fas fa-couch']);
       }
     } else {
       // Handle specific cases with Font Awesome icons
       switch (furnitureType) {
         case 'restroom':
-          iconToUse = 'fas fa-restroom';
+          iconToUse = FontAwesomeIconPaths['fas fa-restroom'];
           iconColor = FontAwesomeIconColors['fas fa-restroom'];
           break;
         case 'meeting':
-          iconToUse = 'fas fa-users';
+          iconToUse = FontAwesomeIconPaths['fas fa-users'];
           iconColor = FontAwesomeIconColors['fas fa-users'];
           break;
         case 'medical':
         case 'first-aid':
-          iconToUse = 'fas fa-stethoscope';
+          iconToUse = FontAwesomeIconPaths['fas fa-stethoscope'];
           iconColor = FontAwesomeIconColors['fas fa-stethoscope'];
           break;
         case 'childcare':
         case 'nursing-room':
         case 'family-services':
-          iconToUse = 'fas fa-baby';
+          iconToUse = FontAwesomeIconPaths['fas fa-baby'];
           iconColor = FontAwesomeIconColors['fas fa-baby'];
           break;
         case 'accessible':
         case 'wheelchair-accessible':
         case 'senior-assistance':
-          iconToUse = 'fas fa-wheelchair';
+          iconToUse = FontAwesomeIconPaths['fas fa-wheelchair'];
           iconColor = FontAwesomeIconColors['fas fa-wheelchair'];
           break;
         case 'info':
         case 'information':
         case 'info-point':
-          iconToUse = 'fas fa-info-circle';
+          iconToUse = FontAwesomeIconPaths['fas fa-info-circle'];
           iconColor = FontAwesomeIconColors['fas fa-info-circle'];
           break;
         case 'lost-found':
-          iconToUse = 'fas fa-search';
+          iconToUse = FontAwesomeIconPaths['fas fa-search'];
           iconColor = FontAwesomeIconColors['fas fa-search'];
           break;
         case 'sofa':
         default:
-          iconToUse = 'fas fa-couch';
+          iconToUse = FontAwesomeIconPaths['fas fa-couch'];
           iconColor = FontAwesomeIconColors['fas fa-couch'];
       }
     }

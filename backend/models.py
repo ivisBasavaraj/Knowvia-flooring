@@ -30,7 +30,8 @@ class User:
 
 class FloorPlan:
     def __init__(self, name: str, description: str = None, event_id: str = None, 
-                 floor: int = 1, layer: int = 0, state: Dict = None, user_id: str = None):
+                 floor: int = 1, layer: int = 0, state: Dict = None, user_id: str = None,
+                 status: str = 'draft'):
         self.name = name
         self.description = description
         self.created = datetime.utcnow()
@@ -41,6 +42,7 @@ class FloorPlan:
         self.floor = floor
         self.layer = layer
         self.user_id = user_id  # Track who created the floor plan
+        self.status = status  # Status: 'draft', 'active', 'published', 'archived'
     
     def _default_state(self) -> Dict:
         return {
@@ -75,7 +77,8 @@ class FloorPlan:
             'event_id': self.event_id,
             'floor': self.floor,
             'layer': self.layer,
-            'user_id': self.user_id
+            'user_id': self.user_id,
+            'status': self.status
         }
     
     def update_state(self, new_state: Dict):

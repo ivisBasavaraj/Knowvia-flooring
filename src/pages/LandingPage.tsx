@@ -53,7 +53,7 @@ const LandingPage: React.FC = () => {
                   href="#features" 
                   className="bg-white hover:bg-gray-50 text-blue-600 border border-blue-200 px-6 py-3 rounded-md font-medium text-center flex items-center justify-center"
                 >
-                  Learn More <ChevronRight size={16} className="ml-1" />
+                  Learn More <FontAwesomeIcon icon="fas fa-chevron-right" size={16} className="ml-1" />
                 </a>
               </div>
             </div>
@@ -87,7 +87,7 @@ const LandingPage: React.FC = () => {
             {/* Feature 1 */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow feature-card">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Package size={24} className="text-blue-600" />
+                <FontAwesomeIcon icon="fas fa-cube" size={24} className="text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">3D Visualization</h3>
               <p className="text-gray-600">
@@ -98,7 +98,7 @@ const LandingPage: React.FC = () => {
             {/* Feature 2 */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow feature-card">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Building2 size={24} className="text-blue-600" />
+                <FontAwesomeIcon icon="fas fa-building" size={24} className="text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Booth Management</h3>
               <p className="text-gray-600">
@@ -109,7 +109,7 @@ const LandingPage: React.FC = () => {
             {/* Feature 3 */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow feature-card">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Users size={24} className="text-blue-600" />
+                <FontAwesomeIcon icon="fas fa-users" size={24} className="text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Exhibitor Management</h3>
               <p className="text-gray-600">
@@ -120,7 +120,7 @@ const LandingPage: React.FC = () => {
             {/* Feature 4 */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow feature-card">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Layers size={24} className="text-blue-600" />
+                <FontAwesomeIcon icon="fas fa-layer-group" size={24} className="text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Multi-Layer Editing</h3>
               <p className="text-gray-600">
@@ -131,7 +131,7 @@ const LandingPage: React.FC = () => {
             {/* Feature 5 */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow feature-card">
               <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Eye size={24} className="text-blue-600" />
+                <FontAwesomeIcon icon="fas fa-eye" size={24} className="text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Interactive Viewer</h3>
               <p className="text-gray-600">
@@ -212,7 +212,7 @@ const LandingPage: React.FC = () => {
                 />
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <div className="bg-blue-600 bg-opacity-90 text-white px-4 py-3 rounded-full shadow-lg">
-                    <Package size={32} />
+                    <FontAwesomeIcon icon="fas fa-box" size={32} />
                   </div>
                 </div>
               </div>

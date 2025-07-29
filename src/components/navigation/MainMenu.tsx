@@ -13,7 +13,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({ className = '' }) => {
   const location = useLocation();
   const { user, logout } = useAuthStore();
 
-  const menuItems = [
+  const menuItems = user?.role === 'admin' ? [
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -23,25 +23,40 @@ export const MainMenu: React.FC<MainMenuProps> = ({ className = '' }) => {
     },
     {
       id: 'floor-plans',
-      label: 'Floor Plans',
-      icon: <FontAwesomeIcon icon="fas fa-drafting-compass" size={18} />,
-      path: '/floor-plans/new',
-      description: 'Create and edit floor plans'
+      label: 'Create Floor Plan',
+      icon: <FontAwesomeIcon icon="fas fa-plus-circle" size={18} />,
+      path: '/admin/floor-plans/new',
+      description: 'Create new floor plans'
     },
     {
       id: 'floor-plans-list',
-      label: 'All Floor Plans',
+      label: 'Manage Floor Plans',
       icon: <FontAwesomeIcon icon="fas fa-file-alt" size={18} />,
       action: 'show-manager',
-      description: 'View all saved floor plans (API)'
+      description: 'View and manage all floor plans'
     },
-    ...(user?.role === 'admin' ? [{
+    {
       id: 'users',
       label: 'Users',
       icon: <FontAwesomeIcon icon="fas fa-users" size={18} />,
       path: '/users',
-      description: 'User management (Admin only)'
-    }] : []),
+      description: 'User management'
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      icon: <FontAwesomeIcon icon="fas fa-cog" size={18} />,
+      path: '/settings',
+      description: 'Application settings'
+    }
+  ] : [
+    {
+      id: 'floor-plans',
+      label: 'Floor Plans',
+      icon: <FontAwesomeIcon icon="fas fa-map" size={18} />,
+      path: '/floor-plans',
+      description: 'View available floor plans'
+    },
     {
       id: 'settings',
       label: 'Settings',

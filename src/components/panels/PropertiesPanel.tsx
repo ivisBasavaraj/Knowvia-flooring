@@ -255,6 +255,35 @@ const BoothProperties: React.FC<{ element: BoothElement }> = ({ element }) => {
           />
         </div>
       </div>
+      <div className="space-y-1">
+        <label className="text-xs text-gray-500">Image URL</label>
+        <input 
+          type="text" 
+          value={element.image || ''} 
+          onChange={(e) => handleChange('image', e.target.value)}
+          placeholder="https://example.com/image.jpg"
+          className="w-full p-1 text-sm border border-gray-300 rounded" 
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="text-xs text-gray-500">Website</label>
+        <input 
+          type="text" 
+          value={element.website || ''} 
+          onChange={(e) => handleChange('website', e.target.value)}
+          placeholder="https://example.com"
+          className="w-full p-1 text-sm border border-gray-300 rounded" 
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="text-xs text-gray-500">Description</label>
+        <textarea 
+          value={element.description || ''} 
+          onChange={(e) => handleChange('description', e.target.value)}
+          placeholder="Enter booth description"
+          className="w-full p-1 text-sm border border-gray-300 rounded min-h-20" 
+        />
+      </div>
     </div>
   );
 };
