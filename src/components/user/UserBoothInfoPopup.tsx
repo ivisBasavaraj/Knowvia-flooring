@@ -63,10 +63,10 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+      <div className="glass-panel max-w-lg w-full max-h-[90vh] overflow-y-auto animate-float">
         {/* Header */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-t-2xl">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-4">
               {/* Company Logo */}
@@ -74,7 +74,7 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
                 <img
                   src={company.logo}
                   alt={company.name}
-                  className="w-16 h-16 rounded-lg object-cover border border-gray-200"
+                  className="w-16 h-16 rounded-xl object-cover border-2 border-white border-opacity-30 shadow-lg"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
@@ -82,26 +82,26 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
                   }}
                 />
               ) : null}
-              <div className={`w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 
-                flex items-center justify-center text-white font-bold text-xl
+              <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-white to-gray-100 
+                flex items-center justify-center text-purple-600 font-bold text-xl shadow-lg
                 ${company?.logo ? 'hidden' : ''}`}>
                 {company?.name?.charAt(0).toUpperCase() || booth.number.charAt(0)}
               </div>
               
               <div>
-                <h3 className="text-xl font-bold text-gray-900">
+                <h3 className="text-xl font-bold text-white">
                   {company?.name || `Booth ${booth.number}`}
                 </h3>
-                <p className="text-gray-600">Booth #{booth.number}</p>
+                <p className="text-white text-opacity-90">Stand #{booth.number}</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <div className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(company?.status || 'available')}`}>
+                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold bg-white bg-opacity-20 text-white border border-white border-opacity-30`}>
                     {getStatusText(company?.status || 'available')}
                   </div>
                   {company?.featured && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs 
-                      font-medium bg-purple-100 text-purple-800">
+                      font-bold bg-yellow-400 text-yellow-900">
                       <FontAwesomeIcon icon="fas fa-star" size={10} className="mr-1" />
-                      Featured
+                      Destacado
                     </span>
                   )}
                 </div>
@@ -109,7 +109,7 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="text-white text-opacity-70 hover:text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors"
             >
               <FontAwesomeIcon icon="fas fa-times" size={20} />
             </button>
@@ -122,34 +122,34 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
           {company?.description && (
             <div>
               <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                <FontAwesomeIcon icon="fas fa-info-circle" size={16} className="mr-2 text-blue-500" />
-                About Company
+                <FontAwesomeIcon icon="fas fa-info-circle" size={16} className="mr-2 text-purple-500" />
+                Acerca de la Empresa
               </h4>
-              <p className="text-gray-600 text-sm leading-relaxed">{company.description}</p>
+              <p className="text-gray-700 text-sm leading-relaxed bg-gray-50 p-4 rounded-lg">{company.description}</p>
             </div>
           )}
 
           {/* Booth Details */}
           <div>
             <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-              <FontAwesomeIcon icon="fas fa-building" size={16} className="mr-2 text-green-500" />
-              Booth Information
+              <FontAwesomeIcon icon="fas fa-building" size={16} className="mr-2 text-blue-500" />
+              Información del Stand
             </h4>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1">Booth Number</span>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+                <span className="text-blue-600 block mb-1 font-medium">Número de Stand</span>
                 <p className="font-medium text-gray-900">{booth.number}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1">Floor Level</span>
-                <p className="font-medium text-gray-900">Level {company?.floor || 1}</p>
+              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
+                <span className="text-green-600 block mb-1 font-medium">Nivel de Planta</span>
+                <p className="font-medium text-gray-900">Nivel {company?.floor || 1}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1">Category</span>
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
+                <span className="text-purple-600 block mb-1 font-medium">Categoría</span>
                 <p className="font-medium text-gray-900">{company?.category || 'General'}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1">Dimensions</span>
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
+                <span className="text-orange-600 block mb-1 font-medium">Dimensiones</span>
                 <p className="font-medium text-gray-900">{booth.width}" × {booth.height}"</p>
                 <p className="text-xs text-gray-500">
                   {Math.round(booth.width * 0.0254 * 10) / 10}m × {Math.round(booth.height * 0.0254 * 10) / 10}m
@@ -162,20 +162,20 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
           {company?.contact && (
             <div>
               <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-                <FontAwesomeIcon icon="fas fa-address-book" size={16} className="mr-2 text-purple-500" />
-                Contact Information
+                <FontAwesomeIcon icon="fas fa-address-book" size={16} className="mr-2 text-green-500" />
+                Información de Contacto
               </h4>
               <div className="space-y-3">
                 {company.contact.phone && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
                       <FontAwesomeIcon icon="fas fa-phone" size={14} className="text-blue-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="text-sm text-blue-600 font-medium">Teléfono</p>
                       <a 
                         href={`tel:${company.contact.phone}`}
-                        className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                        className="font-semibold text-gray-900 hover:text-blue-600 transition-colors"
                       >
                         {company.contact.phone}
                       </a>
@@ -183,15 +183,15 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
                   </div>
                 )}
                 {company.contact.email && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-200">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md">
                       <FontAwesomeIcon icon="fas fa-envelope" size={14} className="text-green-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="text-sm text-green-600 font-medium">Correo Electrónico</p>
                       <a 
                         href={`mailto:${company.contact.email}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-semibold text-blue-600 hover:underline"
                       >
                         {company.contact.email}
                       </a>
@@ -199,17 +199,17 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
                   </div>
                 )}
                 {(company.contact.website || company.website) && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-200">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
                       <FontAwesomeIcon icon="fas fa-globe" size={14} className="text-purple-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Website</p>
+                      <p className="text-sm text-purple-600 font-medium">Sitio Web</p>
                       <a 
                         href={company.contact.website || company.website} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-semibold text-blue-600 hover:underline"
                       >
                         {(company.contact.website || company.website)?.replace(/^https?:\/\//, '')}
                       </a>
@@ -223,17 +223,17 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
           {/* Booth Position */}
           <div>
             <h4 className="font-medium text-gray-900 mb-3 flex items-center">
-              <FontAwesomeIcon icon="fas fa-map-marker-alt" size={16} className="mr-2 text-red-500" />
-              Location Details
+              <FontAwesomeIcon icon="fas fa-map-marker-alt" size={16} className="mr-2 text-orange-500" />
+              Detalles de Ubicación
             </h4>
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500 block mb-1">X Position</span>
+                  <span className="text-orange-600 block mb-1 font-medium">Posición X</span>
                   <p className="font-medium text-gray-900">{Math.round(booth.x)}px</p>
                 </div>
                 <div>
-                  <span className="text-gray-500 block mb-1">Y Position</span>
+                  <span className="text-orange-600 block mb-1 font-medium">Posición Y</span>
                   <p className="font-medium text-gray-900">{Math.round(booth.y)}px</p>
                 </div>
               </div>
@@ -241,31 +241,31 @@ export const UserBoothInfoPopup: React.FC<UserBoothInfoPopupProps> = ({ booth, c
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4 border-t border-gray-200">
+          <div className="flex gap-3 pt-6 border-t border-gray-200">
             {company?.contact?.website || company?.website ? (
               <button 
                 onClick={() => window.open(company.contact?.website || company.website, '_blank')}
-                className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 
-                  transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-purple-700 hover:to-blue-700 
+                  transition-all duration-200 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg transform hover:scale-105"
               >
                 <FontAwesomeIcon icon="fas fa-external-link-alt" size={14} />
-                Visit Website
+                Visitar Sitio Web
               </button>
             ) : (
-              <button className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 
-                transition-colors font-medium text-sm flex items-center justify-center gap-2">
+              <button className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-xl hover:from-purple-700 hover:to-blue-700 
+                transition-all duration-200 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg transform hover:scale-105">
                 <FontAwesomeIcon icon="fas fa-info-circle" size={14} />
-                More Info
+                Más Información
               </button>
             )}
             {company?.contact?.email && (
               <button 
                 onClick={() => window.open(`mailto:${company.contact?.email}`, '_blank')}
-                className="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 
-                  transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:from-gray-200 hover:to-gray-300 
+                  transition-all duration-200 font-semibold text-sm flex items-center justify-center gap-2 shadow-md transform hover:scale-105 border border-gray-300"
               >
                 <FontAwesomeIcon icon="fas fa-envelope" size={14} />
-                Contact
+                Contactar
               </button>
             )}
           </div>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Group } from 'react-konva';
+import { Stage, Layer, Group, Rect } from 'react-konva';
 import { useCanvasStore } from '../../store/canvasStore';
 import { usePathFinding } from '../../hooks/usePathFinding';
 import { ElementRenderer } from '../canvas/ElementRenderer';
@@ -7,7 +7,6 @@ import { CanvasGrid } from '../canvas/CanvasGrid';
 import { BackgroundImage } from '../canvas/BackgroundImage';
 import { PathRenderer } from '../canvas/PathRenderer';
 import { PathControls } from '../canvas/PathControls';
-import { PathSelector } from '../canvas/PathSelector';
 
 interface ViewMode2DProps {
   onBoothClick: (boothId: string) => void;
@@ -137,7 +136,7 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBo
   };
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-hidden">
+    <div ref={containerRef} className="w-full h-full overflow-hidden canvas-area">
       {stageSize.width > 0 && (
         <Stage
           ref={stageRef}
@@ -148,8 +147,21 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBo
           draggable
           onDragStart={handleDragStart}
           onDragMove={handleDragMove}
+          style={{ background: 'radial-gradient(ellipse at center, #f7fafc 0%, #edf2f7 100%)' }}
         >
+          {/* ExpofP-style Background Layer */}
           <Layer>
+            {/* Professional canvas background */}
+            <Rect
+              x={0}
+              y={0}
+              width={canvasSize.width}
+              height={canvasSize.height}
+              fill="linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%)"
+              stroke="#e2e8f0"
+              strokeWidth={1}
+            />
+            
             {/* Background */}
             {backgroundImage && (
               <BackgroundImage
@@ -157,17 +169,20 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBo
               />
             )}
             
-            {/* Grid */}
+            {/* ExpofP-style Grid */}
             {grid.enabled && (
               <CanvasGrid
                 enabled={grid.enabled}
                 size={grid.size}
                 width={canvasSize.width}
                 height={canvasSize.height}
-                opacity={grid.opacity}
+                opacity={0.2}
               />
             )}
+          </Layer>
             
+          {/* Main Elements Layer */}
+          <Layer>
             {/* Elements */}
             <Group
               x={offset.x}
@@ -198,7 +213,7 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBo
       
       {/* Path Controls */}
       {stageSize.width > 0 && (
-        <div className="absolute bottom-4 right-4 z-10">
+        <div className="absolute bottom-6 right-6 z-10">
           <PathControls
             pathMode={pathMode}
             startBoothId={startBoothId}

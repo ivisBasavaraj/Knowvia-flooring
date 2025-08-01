@@ -14,7 +14,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   size, 
   width, 
   height,
-  opacity = 0.5
+  opacity = 0.2
 }) => {
   if (!enabled) return null;
   
@@ -27,8 +27,8 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       <Line
         key={`h-${i}`}
         points={[0, Math.round(i), width, Math.round(i)]} // Round for pixel-perfect alignment
-        stroke="#333"
-        strokeWidth={i % (size * 5) === 0 ? 0.5 : 0.2}
+        stroke="#e2e8f0"
+        strokeWidth={i % (size * 5) === 0 ? 1 : 0.5}
         opacity={opacity}
         perfectDrawEnabled={true} // Enable perfect drawing for crisp lines
         shadowForStrokeEnabled={false} // Disable shadow for better performance
@@ -43,8 +43,8 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       <Line
         key={`v-${i}`}
         points={[Math.round(i), 0, Math.round(i), height]} // Round for pixel-perfect alignment
-        stroke="#333"
-        strokeWidth={i % (size * 5) === 0 ? 0.5 : 0.2}
+        stroke="#e2e8f0"
+        strokeWidth={i % (size * 5) === 0 ? 1 : 0.5}
         opacity={opacity}
         perfectDrawEnabled={true} // Enable perfect drawing for crisp lines
         shadowForStrokeEnabled={false} // Disable shadow for better performance

@@ -36,22 +36,22 @@ export const CanvasControls: React.FC = () => {
   };
 
   return (
-    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 flex items-center space-x-2">
+    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 glass-panel p-3 flex items-center space-x-3">
       <button
         onClick={handleZoomOut}
-        className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
         title="Zoom Out"
       >
         <FontAwesomeIcon icon="fas fa-search-minus" size={20} />
       </button>
       
-      <div className="px-2 min-w-16 text-center">
+      <div className="px-3 min-w-16 text-center font-semibold text-gray-700">
         {Math.round(zoom * 100)}%
       </div>
       
       <button
         onClick={handleZoomIn}
-        className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
         title="Zoom In"
       >
         <FontAwesomeIcon icon="fas fa-search-plus" size={20} />
@@ -59,18 +59,18 @@ export const CanvasControls: React.FC = () => {
       
       <button
         onClick={handleResetZoom}
-        className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
         title="Reset Zoom"
       >
         <FontAwesomeIcon icon="fas fa-expand" size={20} />
       </button>
       
-      <div className="w-px h-6 bg-gray-200 mx-1"></div>
+      <div className="w-px h-6 bg-gray-300 mx-2"></div>
       
       <button
         onClick={handleToggleGrid}
-        className={`p-2 rounded-md transition-colors ${
-          grid.enabled ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'
+        className={`glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105 ${
+          grid.enabled ? 'bg-purple-100 text-purple-600' : ''
         }`}
         title="Toggle Grid"
       >
@@ -79,19 +79,19 @@ export const CanvasControls: React.FC = () => {
       
       <button
         onClick={handleToggleSnap}
-        className={`p-2 rounded-md transition-colors ${
-          grid.snap ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'
+        className={`glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105 ${
+          grid.snap ? 'bg-purple-100 text-purple-600' : ''
         }`}
         title="Toggle Snap to Grid"
       >
         <FontAwesomeIcon icon="fas fa-magnet" size={20} />
       </button>
       
-      <div className="w-px h-6 bg-gray-200 mx-1"></div>
+      <div className="w-px h-6 bg-gray-300 mx-2"></div>
       
       <button
         onClick={handleSave}
-        className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
         title="Save Floor Plan"
       >
         <FontAwesomeIcon icon="fas fa-save" size={20} />
@@ -99,7 +99,7 @@ export const CanvasControls: React.FC = () => {
       
       <button
         onClick={handleExport}
-        className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
         title="Export Floor Plan"
       >
         <FontAwesomeIcon icon="fas fa-download" size={20} />

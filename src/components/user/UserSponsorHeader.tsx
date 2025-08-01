@@ -52,16 +52,16 @@ export const UserSponsorHeader: React.FC<UserSponsorHeaderProps> = ({ sponsors }
   }
 
   return (
-    <div className="bg-white border-b border-gray-200 py-3 sponsor-strip">
+    <div className="sponsor-strip">
       <div className="relative">
         {/* Left scroll button */}
         {canScrollLeft && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white border border-gray-300 rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 glass-button rounded-full p-2 transition-all duration-200"
             aria-label="Scroll left"
           >
-            <FontAwesomeIcon icon="fas fa-chevron-left" size={14} className="text-gray-600" />
+            <FontAwesomeIcon icon="fas fa-chevron-left" size={12} className="text-white" />
           </button>
         )}
 
@@ -69,32 +69,33 @@ export const UserSponsorHeader: React.FC<UserSponsorHeaderProps> = ({ sponsors }
         {canScrollRight && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white border border-gray-300 rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 glass-button rounded-full p-2 transition-all duration-200"
             aria-label="Scroll right"
           >
-            <FontAwesomeIcon icon="fas fa-chevron-right" size={14} className="text-gray-600" />
+            <FontAwesomeIcon icon="fas fa-chevron-right" size={12} className="text-white" />
           </button>
         )}
 
         {/* Sponsors container */}
         <div 
           ref={scrollContainerRef}
-          className="flex space-x-6 px-12 overflow-x-auto scrollbar-hide"
+          className="flex space-x-4 px-12 overflow-x-auto scrollbar-hide"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {sponsors.map((sponsor) => (
             <div
               key={sponsor.id}
-              className="flex-shrink-0 bg-white rounded-lg shadow-sm border border-gray-200 p-3 cursor-pointer sponsor-logo hover:shadow-md transition-all duration-200"
+              className="flex-shrink-0 sponsor-logo cursor-pointer transition-all duration-200 animate-float"
               onClick={() => sponsor.website && window.open(sponsor.website, '_blank')}
               title={`Visit ${sponsor.name}`}
+              style={{ animationDelay: `${Math.random() * 2}s` }}
             >
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
-                className="h-8 w-auto object-contain"
+                className="w-auto object-contain"
                 onError={(e) => {
-                  e.currentTarget.src = `https://via.placeholder.com/120x32/e9ecef/6c757d?text=${sponsor.name}`;
+                  e.currentTarget.src = `https://via.placeholder.com/120x24/667eea/ffffff?text=${sponsor.name}`;
                 }}
               />
             </div>

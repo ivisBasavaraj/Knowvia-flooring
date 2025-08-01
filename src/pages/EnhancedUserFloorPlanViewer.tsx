@@ -405,24 +405,29 @@ export const EnhancedUserFloorPlanViewer: React.FC = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col floor-plan-viewer">
+    <div className="h-screen bg-gray-50 flex flex-col floor-plan-viewer professional-floor-plan">
       {/* Enhanced Sponsor Header */}
       <UserSponsorHeader sponsors={sponsors} />
       
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">
         {/* Enhanced Left Sidebar - Company Listings */}
-        <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
+        <div className={`sidebar transition-all duration-300 ${
           sidebarCollapsed ? 'w-0 overflow-hidden' : 'w-80'
         }`}>
           <div className="h-full flex flex-col">
             {/* Professional Search Header */}
-            <div className="p-6 border-b border-gray-100">
+            <div className="sidebar-header">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Exhibitors Directory</h2>
+                <div>
+                  <h2 className="sidebar-title">Exhibitors Directory</h2>
+                  <p className="sidebar-subtitle">
+                    {filteredCompanies.length} companies on Floor {selectedFloor}
+                  </p>
+                </div>
                 <button
                   onClick={() => setSidebarCollapsed(true)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
+                  className="glass-button p-2 rounded-lg transition-colors"
                   title="Close sidebar"
                 >
                   <FontAwesomeIcon icon="fas fa-times" size={16} />
@@ -432,19 +437,19 @@ export const EnhancedUserFloorPlanViewer: React.FC = () => {
               <div className="search-container">
                 <div className="relative flex items-center">
                   <div className="absolute left-4 flex items-center">
-                    <FontAwesomeIcon icon="fas fa-search" size={14} className="search-icon text-gray-400" />
+                    <FontAwesomeIcon icon="fas fa-search" size={14} className="search-icon" />
                   </div>
                   <input
                     type="text"
-                    placeholder="Search company, booth or category"
+                    placeholder="Buscar empresa, stand o categoría..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="search-input w-full pl-12 pr-12 py-3 rounded-lg"
                   />
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="absolute right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute right-4 glass-button p-1 rounded transition-colors"
                       title="Clear search"
                     >
                       <FontAwesomeIcon icon="fas fa-times" size={14} />
@@ -452,78 +457,86 @@ export const EnhancedUserFloorPlanViewer: React.FC = () => {
                   )}
                 </div>
               </div>
-              
-              {/* Search Results Count */}
-              <div className="mt-3 text-sm text-gray-600">
-                {searchTerm ? (
-                  <span>{filteredCompanies.length} results found</span>
-                ) : (
-                  <span>{filteredCompanies.length} exhibitors on Floor {selectedFloor}</span>
-                )}
-              </div>
             </div>
 
             {/* Enhanced Company List */}
-            <div className="flex-1 overflow-y-auto bg-gray-50">
-              <div className="p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto custom-scrollbar" style={{ background: '#f8fafc' }}>
+              <div className="p-4 space-y-2">
                 {filteredCompanies.map((company) => (
                   <div
                     key={company.id}
-                    className={`cursor-pointer group bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-all duration-200 ${
+                    className={`company-card interactive-element ${
                       company.featured ? 'ring-2 ring-blue-500 ring-opacity-20' : ''
                     }`}
                     onClick={() => handleCompanyClick(company)}
                   >
-                    <div className="flex items-start space-x-4">
+                    <div className="flex items-center space-x-3">
                       {/* Company Logo */}
-                      <div className="flex-shrink-0 relative">
-                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                      <div className="flex-shrink-0">
+                        <div className={`company-avatar ${company.featured ? 'featured' : ''}`}>
                           <img
                             src={company.logo}
                             alt={company.name}
-                            className="w-full h-full object-cover"
                             onError={(e) => {
-                              e.currentTarget.src = `https://via.placeholder.com/48x48/e9ecef/6c757d?text=${company.name.charAt(0)}`;
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
                             }}
                           />
+                          <span className={company.logo ? 'hidden' : ''}>
+                            {company.name.charAt(0).toUpperCase()}
+                          </span>
                         </div>
-                        {company.featured && (
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-                            <FontAwesomeIcon icon="fas fa-star" size={10} className="text-white" />
-                          </div>
-                        )}
                       </div>
 
                       {/* Company Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 truncate mb-1">
-                              {highlightSearchTerm(company.name, searchTerm)}
-                            </h3>
-                            <div className="flex items-center space-x-3 mb-2">
-                              <span className="text-sm font-medium text-blue-600">
-                                Booth {highlightSearchTerm(company.booth_number, searchTerm)}
-                              </span>
-                              <span className="text-xs text-gray-400">•</span>
-                              <span className="text-xs text-gray-500 font-medium">
-                                Floor {company.floor}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                company.status === 'sold' ? 'bg-blue-100 text-blue-800' :
-                                company.status === 'reserved' ? 'bg-orange-100 text-orange-800' :
-                                'bg-green-100 text-green-800'
-                              }`}>
-                                {company.status === 'sold' ? 'Occupied' : 
-                                 company.status === 'reserved' ? 'Reserved' : 'Available'}
-                              </span>
-                              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                                {company.category}
-                              </span>
-                            </div>
-                          </div>
+                        <h3 className="company-name truncate mb-1">
+                          {searchTerm ? (
+                            <span dangerouslySetInnerHTML={{
+                              __html: company.name.replace(
+                                new RegExp(`(${searchTerm})`, 'gi'),
+                                '<span class="search-highlight">$1</span>'
+                              )
+                            }} />
+                          ) : (
+                            company.name
+                          )}
+                        </h3>
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="booth-number">
+                            Stand {searchTerm ? (
+                              <span dangerouslySetInnerHTML={{
+                                __html: company.booth_number.replace(
+                                  new RegExp(`(${searchTerm})`, 'gi'),
+                                  '<span class="search-highlight">$1</span>'
+                                )
+                              }} />
+                            ) : (
+                              company.booth_number
+                            )}
+                          </span>
+                          <span className="text-xs text-gray-400">•</span>
+                          <span className="text-xs text-gray-500 font-medium">
+                            Nivel {company.floor}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2 flex-wrap">
+                          <span className={`status-badge ${
+                            company.status === 'sold' ? 'occupied' :
+                            company.status === 'reserved' ? 'reserved' :
+                            'available'
+                          }`}>
+                            {company.status === 'sold' ? 'Ocupado' : 
+                             company.status === 'reserved' ? 'Reservado' : 'Disponible'}
+                          </span>
+                          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full font-medium">
+                            {company.category}
+                          </span>
+                          {company.featured && (
+                            <span className="status-badge featured">
+                              Destacado
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -535,41 +548,41 @@ export const EnhancedUserFloorPlanViewer: React.FC = () => {
         </div>
 
         {/* Main Canvas Area */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative canvas-area">
           {/* Sidebar Toggle Button */}
           {sidebarCollapsed && (
             <button
               onClick={() => setSidebarCollapsed(false)}
-              className="absolute top-4 left-4 z-20 bg-white border border-gray-300 rounded-lg p-3 shadow-lg hover:shadow-xl transition-all duration-200"
+              className="absolute top-6 left-6 z-20 glass-button p-3 rounded-lg transition-all duration-200"
               title="Open sidebar"
             >
               <FontAwesomeIcon icon="fas fa-bars" size={16} className="text-gray-600" />
             </button>
           )}
 
-          {/* View Mode Toggle */}
-          <div className="absolute top-4 right-4 z-20 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+          {/* ExpofP-style View Mode Toggle */}
+          <div className="absolute top-6 right-6 z-20 view-toggle">
             <button
               onClick={() => setViewMode('2d')}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`view-toggle button ${
                 viewMode === '2d' 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'active' 
+                  : ''
               }`}
             >
-              <FontAwesomeIcon icon="fas fa-map" size={14} className="mr-2" />
-              2D
+              <FontAwesomeIcon icon="fas fa-map" size={14} />
+              <span>2D</span>
             </button>
             <button
               onClick={() => setViewMode('3d')}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`view-toggle button ${
                 viewMode === '3d' 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'active' 
+                  : ''
               }`}
             >
-              <FontAwesomeIcon icon="fas fa-cube" size={14} className="mr-2" />
-              3D
+              <FontAwesomeIcon icon="fas fa-cube" size={14} />
+              <span>3D</span>
             </button>
           </div>
 
@@ -599,48 +612,140 @@ export const EnhancedUserFloorPlanViewer: React.FC = () => {
                 )}
               </>
             ) : (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center h-full glass-panel m-6 rounded-2xl">
                 <div className="text-center">
-                  <FontAwesomeIcon icon="fas fa-map" size={48} className="text-gray-300 mb-4" />
-                  <p className="text-gray-600">Loading floor plan...</p>
+                  <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-500 mx-auto mb-6"></div>
+                  <p className="text-gray-700 font-medium">Cargando plano de exposición...</p>
                 </div>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Enhanced Zoom Controls */}
-          <div className="absolute bottom-6 right-6 flex flex-col gap-3 z-20">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2">
+        {/* ExpofP-style Right Panel */}
+        <div className="right-panel">
+          {/* Floor Navigation */}
+          <div className="panel-section">
+            <h3 className="panel-title">
+              <FontAwesomeIcon icon="fas fa-building" size={16} className="text-blue-500" />
+              Navegación por Plantas
+            </h3>
+            <div className="space-y-3">
               <button
-                onClick={() => {
-                  // Zoom in functionality - can be enhanced later
-                  console.log('Zoom in');
-                }}
-                className="block w-full p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors"
-                title="Zoom In"
+                onClick={() => setSelectedFloor(1)}
+                className={`floor-nav-button w-full text-left ${
+                  selectedFloor === 1 ? 'active' : ''
+                }`}
               >
-                <FontAwesomeIcon icon="fas fa-plus" size={16} />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold">Planta Baja</div>
+                    <div className="text-sm opacity-75">Nivel 1</div>
+                  </div>
+                  {selectedFloor === 1 && (
+                    <FontAwesomeIcon icon="fas fa-check-circle" size={16} />
+                  )}
+                </div>
               </button>
               <button
-                onClick={() => {
-                  // Zoom out functionality - can be enhanced later
-                  console.log('Zoom out');
-                }}
-                className="block w-full p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors"
-                title="Zoom Out"
+                onClick={() => setSelectedFloor(2)}
+                className={`floor-nav-button w-full text-left ${
+                  selectedFloor === 2 ? 'active' : ''
+                }`}
               >
-                <FontAwesomeIcon icon="fas fa-minus" size={16} />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold">Primera Planta</div>
+                    <div className="text-sm opacity-75">Nivel 2</div>
+                  </div>
+                  {selectedFloor === 2 && (
+                    <FontAwesomeIcon icon="fas fa-check-circle" size={16} />
+                  )}
+                </div>
               </button>
-              <button
-                onClick={() => {
-                  // Fit to screen functionality - can be enhanced later
-                  console.log('Fit to screen');
-                }}
-                className="block w-full p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors"
-                title="Fit to Screen"
-              >
-                <FontAwesomeIcon icon="fas fa-expand" size={16} />
-              </button>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="panel-section">
+            <h3 className="panel-title">
+              <FontAwesomeIcon icon="fas fa-info-circle" size={16} className="text-green-500" />
+              Leyenda
+            </h3>
+            <div className="space-y-2">
+              <div className="legend-item">
+                <div className="flex items-center">
+                  <div className="legend-color bg-green-500"></div>
+                  <span className="text-sm font-medium text-gray-700">Stands Disponibles</span>
+                </div>
+                <span className="legend-count">{filteredCompanies.filter(c => c.status === 'available').length}</span>
+              </div>
+              <div className="legend-item">
+                <div className="flex items-center">
+                  <div className="legend-color bg-blue-500"></div>
+                  <span className="text-sm font-medium text-gray-700">Stands Ocupados</span>
+                </div>
+                <span className="legend-count">{filteredCompanies.filter(c => c.status === 'sold').length}</span>
+              </div>
+              <div className="legend-item">
+                <div className="flex items-center">
+                  <div className="legend-color bg-orange-500"></div>
+                  <span className="text-sm font-medium text-gray-700">Stands Reservados</span>
+                </div>
+                <span className="legend-count">{filteredCompanies.filter(c => c.status === 'reserved').length}</span>
+              </div>
+              <div className="legend-item">
+                <div className="flex items-center">
+                  <div className="legend-color bg-pink-500"></div>
+                  <span className="text-sm font-medium text-gray-700">Empresas Destacadas</span>
+                </div>
+                <span className="legend-count">{filteredCompanies.filter(c => c.featured).length}</span>
+              </div>
+            </div>
+            
+            {/* ExpofP-style Progress */}
+            <div className="progress-container">
+              <div className="progress-label">
+                <span>Tasa de Ocupación</span>
+                <span className="font-bold">
+                  {filteredCompanies.length > 0 ? 
+                    Math.round((filteredCompanies.filter(c => c.status === 'sold').length / filteredCompanies.length) * 100) : 0}%
+                </span>
+              </div>
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill"
+                  style={{ 
+                    width: filteredCompanies.length > 0 ? 
+                      `${(filteredCompanies.filter(c => c.status === 'sold').length / filteredCompanies.length) * 100}%` : '0%'
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          {/* Quick Stats */}
+          <div className="panel-section">
+            <h3 className="panel-title">
+              <FontAwesomeIcon icon="fas fa-chart-bar" size={16} className="text-purple-500" />
+              Estadísticas Rápidas
+            </h3>
+            <div className="quick-stats-grid">
+              <div className="stat-card available">
+                <div className="stat-number">{filteredCompanies.length}</div>
+                <div className="stat-label">Total Stands</div>
+              </div>
+              <div className="stat-card occupied">
+                <div className="stat-number">{filteredCompanies.filter(c => c.status === 'sold').length}</div>
+                <div className="stat-label">Ocupados</div>
+              </div>
+              <div className="stat-card reserved">
+                <div className="stat-number">{filteredCompanies.filter(c => c.status === 'reserved').length}</div>
+                <div className="stat-label">Reservados</div>
+              </div>
+              <div className="stat-card featured">
+                <div className="stat-number">{filteredCompanies.filter(c => c.featured).length}</div>
+                <div className="stat-label">Destacados</div>
+              </div>
             </div>
           </div>
         </div>

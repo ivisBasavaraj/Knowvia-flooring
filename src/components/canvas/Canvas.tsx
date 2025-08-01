@@ -928,7 +928,7 @@ export const Canvas: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className={`w-full h-full overflow-hidden bg-neutral-100 relative ${isDragOver ? 'bg-blue-50' : ''}`}
+      className={`w-full h-full overflow-hidden canvas-area relative ${isDragOver ? 'bg-blue-50' : ''}`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -950,20 +950,20 @@ export const Canvas: React.FC = () => {
         imageSmoothingEnabled={true} // Enable image smoothing for better quality
         perfectDrawEnabled={true} // Enable perfect drawing for crisp edges
       >
-        {/* Background Layer */}
+        {/* ExpofP-style Background Layer */}
         <Layer
           imageSmoothingEnabled={true}
           perfectDrawEnabled={true}
           hitGraphEnabled={false} // Disable hit graph for better performance
         >
-          {/* Base Canvas Background */}
+          {/* ExpofP-style Canvas Background */}
           <Rect
             x={0}
             y={0}
             width={canvasSize.width}
             height={canvasSize.height}
-            fill="#ffffff"
-            stroke="#cccccc"
+            fill="#f7fafc"
+            stroke="#e2e8f0"
             strokeWidth={1}
           />
           
@@ -988,7 +988,7 @@ export const Canvas: React.FC = () => {
           )}
         </Layer>
         
-        {/* Grid Layer - Always on top of background and flooring */}
+        {/* ExpofP-style Grid Layer */}
         <Layer
           imageSmoothingEnabled={true}
           perfectDrawEnabled={true}
@@ -999,7 +999,7 @@ export const Canvas: React.FC = () => {
             size={grid.size}
             width={canvasSize.width}
             height={canvasSize.height}
-            opacity={grid.opacity}
+            opacity={0.2}
           />
         </Layer>
         

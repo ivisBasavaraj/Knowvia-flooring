@@ -265,28 +265,28 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
   };
 
   const renderBooth = (booth: BoothElement) => {
-    // Enhanced status colors with better contrast
+    // ExpofP-style status colors
     const statusColors = {
-      available: 'rgba(232, 245, 233, 0.9)',      // Light green
-      reserved: 'rgba(255, 243, 224, 0.9)',       // Light orange
-      sold: 'rgba(255, 235, 238, 0.9)'            // Light red
+      available: 'rgba(240, 255, 244, 0.95)',     // ExpofP green
+      reserved: 'rgba(255, 250, 240, 0.95)',      // ExpofP orange  
+      sold: 'rgba(235, 248, 255, 0.95)'           // ExpofP blue
     };
     
     const statusBorderColors = {
-      available: '#4CAF50',  // Green
-      reserved: '#FF9800',   // Orange
-      sold: '#F44336'        // Red
+      available: '#48bb78',  // ExpofP green
+      reserved: '#ed8936',   // ExpofP orange
+      sold: '#4299e1'        // ExpofP blue
     };
     
-    // Calculate icon size and position
-    const iconSize = Math.min(booth.width, booth.height) * 0.7;
-    const iconScale = iconSize / 40; // 40 is our base viewBox size
-    const iconX = (booth.width - iconSize) / 2;
-    const iconY = (booth.height - iconSize) / 2;
+    const shadowColors = {
+      available: 'rgba(72, 187, 120, 0.2)',
+      reserved: 'rgba(237, 137, 54, 0.2)', 
+      sold: 'rgba(66, 153, 225, 0.2)'
+    };
     
     return (
       <>
-        {/* Booth background with status-based styling */}
+        {/* ExpofP-style booth background */}
         <Rect
           x={0}
           y={0}
@@ -294,43 +294,71 @@ export const ElementRenderer: React.FC<ElementRendererProps> = ({
           height={booth.height}
           fill={statusColors[booth.status] || statusColors.available}
           stroke={statusBorderColors[booth.status] || FontAwesomeIconColors['fas fa-th-large']}
-          strokeWidth={2}
-          cornerRadius={6}
-          shadowColor="rgba(0,0,0,0.1)"
-          shadowBlur={4}
-          shadowOffset={{ x: 2, y: 2 }}
+          strokeWidth={3}
+          cornerRadius={8}
+          shadowColor={shadowColors[booth.status] || shadowColors.available}
+          shadowBlur={8}
+          shadowOffset={{ x: 0, y: 4 }}
+          shadowOpacity={0.6}
         />
         
-        {/* Booth icon with proper scaling */}
-        {renderIcon(booth, FontAwesomeIconPaths['fas fa-th-large'], FontAwesomeIconColors['fas fa-th-large'])}
+        {/* ExpofP-style booth icon */}
+        {renderIcon(booth, FontAwesomeIconPaths['fas fa-th-large'], statusBorderColors[booth.status])}
         
-        {/* Booth number with adaptive sizing */}
+        {/* ExpofP-style booth number */}
         {booth.width > 40 && booth.height > 25 && (
-          <Text
-            x={4}
-            y={4}
-            text={booth.number}
-            fontSize={Math.min(Math.max(booth.width * 0.12, 10), 16)}
-            fontFamily="Arial"
-            fontStyle="bold"
-            fill="#333333"
-            width={booth.width - 8}
-            ellipsis={true}
-          />
+          <Group>
+            <Rect
+              x={6}
+              y={6}
+              width={Math.min(booth.width - 12, 60)}
+              height={18}
+              fill="rgba(255, 255, 255, 0.95)"
+              cornerRadius={6}
+              shadowColor="rgba(0, 0, 0, 0.1)"
+              shadowBlur={2}
+              shadowOffset={{ x: 0, y: 1 }}
+            />
+            <Text
+              x={8}
+              y={8}
+              text={booth.number}
+              fontSize={Math.min(Math.max(booth.width * 0.1, 10), 14)}
+              fontFamily="-apple-system, BlinkMacSystemFont, sans-serif"
+              fontStyle="bold"
+              fill="#2d3748"
+              width={Math.min(booth.width - 16, 56)}
+              ellipsis={true}
+            />
+          </Group>
         )}
         
-        {/* Dimensions text - only show if booth is large enough */}
-        {booth.width > 60 && booth.height > 40 && (
-          <Text
-            x={4}
-            y={booth.height - 16}
-            text={booth.dimensions.imperial}
-            fontSize={Math.min(Math.max(booth.width * 0.08, 8), 12)}
-            fontFamily="Arial"
-            fill="#666666"
-            width={booth.width - 8}
-            ellipsis={true}
-          />
+        {/* ExpofP-style company name */}
+        {booth.width > 80 && booth.height > 60 && booth.exhibitor?.companyName && (
+          <Group>
+            <Rect
+              x={6}
+              y={booth.height - 24}
+              width={booth.width - 12}
+              height={18}
+              fill="rgba(255, 255, 255, 0.95)"
+              cornerRadius={6}
+              shadowColor="rgba(0, 0, 0, 0.1)"
+              shadowBlur={2}
+              shadowOffset={{ x: 0, y: 1 }}
+            />
+            <Text
+              x={8}
+              y={booth.height - 22}
+              text={booth.exhibitor.companyName}
+              fontSize={Math.min(Math.max(booth.width * 0.08, 8), 12)}
+              fontFamily="-apple-system, BlinkMacSystemFont, sans-serif"
+              fill="#4a5568"
+              width={booth.width - 16}
+              ellipsis={true}
+              align="center"
+            />
+          </Group>
         )}
       </>
     );
