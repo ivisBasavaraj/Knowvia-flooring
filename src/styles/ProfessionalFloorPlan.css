@@ -617,22 +617,22 @@
   opacity: 0.8;
 }
 
-/* Professional Popup */
+/* Professional Popup Styles */
 .professional-popup {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid #D3D3D3;
   overflow: hidden;
-  max-width: 480px;
+  max-width: 520px;
   width: 100%;
-  animation: popupSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: popupSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes popupSlideIn {
   from {
     opacity: 0;
-    transform: scale(0.9) translateY(20px);
+    transform: scale(0.9) translateY(30px);
   }
   to {
     opacity: 1;
@@ -641,39 +641,41 @@
 }
 
 .professional-popup-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #007BFF 0%, #0056b3 100%);
   color: white;
-  padding: 20px;
+  padding: 28px;
   position: relative;
 }
 
 .professional-popup-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .professional-popup-close:hover {
   background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 .professional-popup-content {
-  padding: 24px;
+  padding: 28px;
 }
 
 .professional-popup-section {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .professional-popup-section:last-child {
@@ -681,51 +683,55 @@
 }
 
 .professional-popup-section-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a202c;
-  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2F4F4F;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .professional-contact-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: #f7fafc;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 12px;
   transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
 }
 
 .professional-contact-item:hover {
-  background: #edf2f7;
+  background: #e9ecef;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .professional-contact-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .professional-contact-icon.phone {
-  background: linear-gradient(135deg, #4299e1, #3182ce);
+  background: linear-gradient(135deg, #007BFF, #0056b3);
 }
 
 .professional-contact-icon.email {
-  background: linear-gradient(135deg, #48bb78, #38a169);
+  background: linear-gradient(135deg, #28a745, #20c997);
 }
 
 .professional-contact-icon.website {
-  background: linear-gradient(135deg, #ed64a6, #d53f8c);
+  background: linear-gradient(135deg, #C3A4FF, #9f7aea);
 }
 
 /* Professional Action Buttons */
@@ -994,6 +1000,9 @@
 
 /* Professional Focus States */
 .professional-focus-visible {
+  outline: 2px solid #007BFF;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Professional High Contrast Mode */
@@ -1018,4 +1027,25 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Professional Scrollbar */
+.professional-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.professional-scrollbar::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.professional-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #D3D3D3, #adb5bd);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  border: 1px solid #e9ecef;
+}
+
+.professional-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #adb5bd, #6c757d);
 }

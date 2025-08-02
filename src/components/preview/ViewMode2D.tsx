@@ -176,7 +176,7 @@ export const ViewMode2D: React.FC<ViewMode2DProps> = ({ onBoothClick, selectedBo
                 size={grid.size}
                 width={canvasSize.width}
                 height={canvasSize.height}
-                opacity={0.2}
+                opacity={0.3}
               />
             )}
           </Layer>

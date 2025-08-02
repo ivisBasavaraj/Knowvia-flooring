@@ -598,24 +598,24 @@ export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick, selectedBo
       
       {/* ExpofP-style Legend */}
       {!isLoading && (
-        <div className="absolute top-6 left-6 glass-panel p-4 z-10 text-sm">
-          <h3 className="font-bold mb-3 text-base text-gray-800">Exhibition Legend</h3>
+        <div className="absolute top-6 left-6 bg-white border border-gray-300 rounded-xl p-5 z-10 text-sm shadow-lg">
+          <h3 className="font-bold mb-4 text-lg text-gray-800">Exhibition Legend</h3>
           <div className="grid grid-cols-2 gap-x-6 gap-y-2">
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-500 mr-2 rounded shadow-sm"></div>
-              <span className="font-medium">Available</span>
+              <div className="w-5 h-5 mr-3 rounded-md shadow-sm" style={{ backgroundColor: '#28a745' }}></div>
+              <span className="font-semibold text-gray-700">Available</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-orange-500 mr-2 rounded shadow-sm"></div>
-              <span className="font-medium">Reserved</span>
+              <div className="w-5 h-5 mr-3 rounded-md shadow-sm" style={{ backgroundColor: '#ffc107' }}></div>
+              <span className="font-semibold text-gray-700">Reserved</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-blue-500 mr-2 rounded shadow-sm"></div>
-              <span className="font-medium">Occupied</span>
+              <div className="w-5 h-5 mr-3 rounded-md shadow-sm" style={{ backgroundColor: '#007BFF' }}></div>
+              <span className="font-semibold text-gray-700">Occupied</span>
             </div>
             <div className="flex items-center">
-              <div className="w-4 h-4 bg-gray-500 mr-2 rounded shadow-sm"></div>
-              <span className="font-medium">Infrastructure</span>
+              <div className="w-5 h-5 mr-3 rounded-md shadow-sm" style={{ backgroundColor: '#6c757d' }}></div>
+              <span className="font-semibold text-gray-700">Infrastructure</span>
             </div>
           </div>
         </div>
@@ -638,20 +638,20 @@ export const ViewMode3D: React.FC<ViewMode3DProps> = ({ onBoothClick, selectedBo
       
       {/* ExpofP-style Camera Controls Help */}
       {!isLoading && (
-        <div className="absolute bottom-6 left-6 glass-panel p-4 z-10 text-sm">
-          <h3 className="font-bold mb-3 text-base text-gray-800">3D Controls</h3>
+        <div className="absolute bottom-6 left-6 bg-white border border-gray-300 rounded-xl p-5 z-10 text-sm shadow-lg">
+          <h3 className="font-bold mb-4 text-lg text-gray-800">3D Controls</h3>
           <ul className="space-y-1">
             <li className="flex items-center">
-              <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-              <span>Drag to rotate view</span>
+              <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
+              <span className="font-medium text-gray-700">Drag to rotate view</span>
             </li>
             <li className="flex items-center">
-              <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-              <span>Scroll to zoom</span>
+              <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
+              <span className="font-medium text-gray-700">Scroll to zoom</span>
             </li>
             <li className="flex items-center">
-              <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-              <span>Click booth for details</span>
+              <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
+              <span className="font-medium text-gray-700">Click booth for details</span>
             </li>
           </ul>
         </div>

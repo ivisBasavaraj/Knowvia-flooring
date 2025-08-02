@@ -36,41 +36,41 @@ export const CanvasControls: React.FC = () => {
   };
 
   return (
-    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 glass-panel p-3 flex items-center space-x-3">
+    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-2xl p-4 flex items-center space-x-4 shadow-lg">
       <button
         onClick={handleZoomOut}
-        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
+        className="w-12 h-12 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center text-gray-700 hover:text-gray-900 font-bold text-lg"
         title="Zoom Out"
       >
-        <FontAwesomeIcon icon="fas fa-search-minus" size={20} />
+        –
       </button>
       
-      <div className="px-3 min-w-16 text-center font-semibold text-gray-700">
+      <div className="px-4 min-w-20 text-center font-bold text-gray-800 text-lg">
         {Math.round(zoom * 100)}%
       </div>
       
       <button
         onClick={handleZoomIn}
-        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
+        className="w-12 h-12 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center text-gray-700 hover:text-gray-900 font-bold text-lg"
         title="Zoom In"
       >
-        <FontAwesomeIcon icon="fas fa-search-plus" size={20} />
+        +
       </button>
       
       <button
         onClick={handleResetZoom}
-        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
+        className="w-12 h-12 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center text-gray-700 hover:text-gray-900"
         title="Reset Zoom"
       >
         <FontAwesomeIcon icon="fas fa-expand" size={20} />
       </button>
       
-      <div className="w-px h-6 bg-gray-300 mx-2"></div>
+      <div className="w-px h-8 bg-gray-300 mx-2"></div>
       
       <button
         onClick={handleToggleGrid}
-        className={`glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105 ${
-          grid.enabled ? 'bg-purple-100 text-purple-600' : ''
+        className={`w-12 h-12 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center ${
+          grid.enabled ? 'bg-blue-100 text-blue-600 border-blue-300' : 'bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900'
         }`}
         title="Toggle Grid"
       >
@@ -79,19 +79,19 @@ export const CanvasControls: React.FC = () => {
       
       <button
         onClick={handleToggleSnap}
-        className={`glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105 ${
-          grid.snap ? 'bg-purple-100 text-purple-600' : ''
+        className={`w-12 h-12 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center ${
+          grid.snap ? 'bg-blue-100 text-blue-600 border-blue-300' : 'bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-gray-900'
         }`}
         title="Toggle Snap to Grid"
       >
         <FontAwesomeIcon icon="fas fa-magnet" size={20} />
       </button>
       
-      <div className="w-px h-6 bg-gray-300 mx-2"></div>
+      <div className="w-px h-8 bg-gray-300 mx-2"></div>
       
       <button
         onClick={handleSave}
-        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
+        className="w-12 h-12 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center text-gray-700 hover:text-gray-900"
         title="Save Floor Plan"
       >
         <FontAwesomeIcon icon="fas fa-save" size={20} />
@@ -99,7 +99,7 @@ export const CanvasControls: React.FC = () => {
       
       <button
         onClick={handleExport}
-        className="glass-button p-3 rounded-lg transition-all duration-200 hover:scale-105"
+        className="w-12 h-12 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl transition-all duration-200 hover:scale-105 flex items-center justify-center text-gray-700 hover:text-gray-900"
         title="Export Floor Plan"
       >
         <FontAwesomeIcon icon="fas fa-download" size={20} />
