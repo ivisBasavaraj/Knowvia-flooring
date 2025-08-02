@@ -89,22 +89,22 @@ export const ProfessionalSponsorHeader: React.FC<ProfessionalSponsorHeaderProps>
   }
 
   return (
-    <div className="bg-white border-b border-gray-200 py-3 relative overflow-hidden">
+    <div className="bg-gray-900 border-b border-gray-700 py-4 relative overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 opacity-30"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-900 to-black opacity-50"></div>
       
       <div className="relative">
         {/* Left scroll button */}
         {canScrollLeft && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 
-              w-10 h-10 bg-white border border-gray-300 rounded-full shadow-lg 
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 
+              w-12 h-12 bg-gray-800 border border-gray-600 rounded-full shadow-lg 
               hover:shadow-xl transition-all duration-200 flex items-center justify-center
-              hover:scale-105"
+              hover:scale-105 hover:bg-gray-700"
             aria-label="Scroll left"
           >
-            <FontAwesomeIcon icon="fas fa-chevron-left" size={14} className="text-gray-600" />
+            <FontAwesomeIcon icon="fas fa-chevron-left" size={16} className="text-white" />
           </button>
         )}
 
@@ -112,48 +112,50 @@ export const ProfessionalSponsorHeader: React.FC<ProfessionalSponsorHeaderProps>
         {canScrollRight && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 
-              w-10 h-10 bg-white border border-gray-300 rounded-full shadow-lg 
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 
+              w-12 h-12 bg-gray-800 border border-gray-600 rounded-full shadow-lg 
               hover:shadow-xl transition-all duration-200 flex items-center justify-center
-              hover:scale-105"
+              hover:scale-105 hover:bg-gray-700"
             aria-label="Scroll right"
           >
-            <FontAwesomeIcon icon="fas fa-chevron-right" size={14} className="text-gray-600" />
+            <FontAwesomeIcon icon="fas fa-chevron-right" size={16} className="text-white" />
           </button>
         )}
 
         {/* Sponsors container */}
         <div 
           ref={scrollContainerRef}
-          className="flex space-x-6 px-12 overflow-x-auto scrollbar-hide"
+          className="flex space-x-4 px-16 overflow-x-auto scrollbar-hide py-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {sponsors.map((sponsor) => (
             <div
               key={sponsor.id}
-              className={`flex-shrink-0 relative group cursor-pointer transition-all duration-300 
-                hover:scale-105 hover:shadow-lg rounded-lg border-2 p-4 
-                bg-gradient-to-br ${getTierGradient(sponsor.tier)} ${getTierBorder(sponsor.tier)}`}
+              className="flex-shrink-0 relative group cursor-pointer transition-all duration-300 
+                hover:scale-105 hover:shadow-xl rounded-xl bg-gray-800 border border-gray-600 
+                p-4 hover:bg-gray-700"
               onClick={() => handleSponsorClick(sponsor)}
               title={`${sponsor.name} - ${sponsor.tier} sponsor`}
             >
               {/* Tier Badge */}
-              <div className="absolute -top-2 -right-2 z-10">
+              <div className="absolute -top-3 -right-3 z-10">
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold
-                  ${sponsor.tier === 'platinum' ? 'bg-gray-800 text-white' :
-                    sponsor.tier === 'gold' ? 'bg-yellow-500 text-white' :
-                    sponsor.tier === 'silver' ? 'bg-gray-500 text-white' :
-                    'bg-orange-500 text-white'}`}>
+                  ${sponsor.tier === 'platinum' ? 'bg-gray-200 text-gray-800' :
+                    sponsor.tier === 'gold' ? 'bg-yellow-400 text-gray-900' :
+                    sponsor.tier === 'silver' ? 'bg-gray-300 text-gray-800' :
+                    'bg-orange-400 text-white'} shadow-lg`}>
                   {sponsor.tier.charAt(0).toUpperCase() + sponsor.tier.slice(1)}
                 </span>
               </div>
 
               {/* Logo */}
-              <div className="w-32 h-12 flex items-center justify-center bg-white rounded-md p-2">
+              <div className="w-36 h-16 flex items-center justify-center bg-white rounded-lg p-3 
+                shadow-inner border border-gray-200">
                 <img
                   src={sponsor.logo}
                   alt={sponsor.name}
-                  className="max-w-full max-h-full object-contain filter group-hover:brightness-110 transition-all"
+                  className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 
+                    group-hover:brightness-110 transition-all duration-300"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = `https://via.placeholder.com/120x40/667eea/ffffff?text=${sponsor.name}`;
@@ -162,8 +164,8 @@ export const ProfessionalSponsorHeader: React.FC<ProfessionalSponsorHeaderProps>
               </div>
 
               {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent 
-                opacity-0 group-hover:opacity-20 rounded-lg transition-all duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-transparent 
+                opacity-0 group-hover:opacity-10 rounded-xl transition-all duration-300" />
             </div>
           ))}
         </div>

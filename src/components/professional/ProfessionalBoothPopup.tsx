@@ -62,12 +62,12 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="professional-popup">
         {/* Header */}
         <div className="professional-popup-header">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-lg overflow-hidden bg-white bg-opacity-20 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-xl overflow-hidden bg-white bg-opacity-20 flex items-center justify-center border-2 border-white border-opacity-30">
               {company?.logo ? (
                 <img
                   src={company.logo}
@@ -80,23 +80,23 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
                   }}
                 />
               ) : null}
-              <div className={`text-white font-bold text-xl ${company?.logo ? 'hidden' : ''}`}>
+              <div className={`text-white font-bold text-2xl ${company?.logo ? 'hidden' : ''}`}>
                 {company?.name?.charAt(0).toUpperCase() || booth.number.charAt(0)}
               </div>
             </div>
             
             <div className="flex-1">
-              <h3 className="text-xl font-bold">
+              <h3 className="text-2xl font-bold text-white">
                 {company?.name || `Booth ${booth.number}`}
               </h3>
-              <p className="opacity-90">Booth #{booth.number}</p>
+              <p className="text-white opacity-90 text-lg">Stand #{booth.number}</p>
               <div className="flex items-center gap-2 mt-2">
-                <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(company?.status || 'available')}`}>
+                <div className="inline-block px-4 py-2 rounded-full text-sm font-bold bg-white bg-opacity-20 text-white border border-white border-opacity-30">
                   {getStatusText(company?.status || 'available')}
                 </div>
                 {company?.featured && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs 
-                    font-medium bg-white bg-opacity-20 text-white border border-white border-opacity-30">
+                  <span className="inline-flex items-center px-3 py-2 rounded-full text-sm 
+                    font-bold bg-yellow-400 text-gray-900 border border-yellow-300">
                     <FontAwesomeIcon icon="fas fa-star" size={10} className="mr-1" />
                     Featured
                   </span>
@@ -109,7 +109,7 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
             onClick={onClose}
             className="professional-popup-close"
           >
-            <FontAwesomeIcon icon="fas fa-times" size={16} />
+            <FontAwesomeIcon icon="fas fa-times" size={18} />
           </button>
         </div>
 
@@ -119,36 +119,36 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
           {company?.description && (
             <div className="professional-popup-section">
               <h4 className="professional-popup-section-title">
-                <FontAwesomeIcon icon="fas fa-info-circle" size={16} className="text-blue-500" />
+                <FontAwesomeIcon icon="fas fa-info-circle" size={18} className="text-blue-500" />
                 About Company
               </h4>
-              <p className="text-gray-600 text-sm leading-relaxed">{company.description}</p>
+              <p className="text-gray-700 text-base leading-relaxed bg-gray-50 p-4 rounded-lg border border-gray-200">{company.description}</p>
             </div>
           )}
 
           {/* Booth Details */}
           <div className="professional-popup-section">
             <h4 className="professional-popup-section-title">
-              <FontAwesomeIcon icon="fas fa-building" size={16} className="text-green-500" />
+              <FontAwesomeIcon icon="fas fa-building" size={18} className="text-green-500" />
               Booth Information
             </h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1 text-sm">Booth Number</span>
-                <p className="font-medium text-gray-900">{booth.number}</p>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                <span className="text-blue-600 block mb-2 text-sm font-semibold">Booth Number</span>
+                <p className="font-bold text-gray-900 text-lg">{booth.number}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1 text-sm">Floor Level</span>
-                <p className="font-medium text-gray-900">Level {company?.floor || 1}</p>
+              <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+                <span className="text-green-600 block mb-2 text-sm font-semibold">Floor Level</span>
+                <p className="font-bold text-gray-900 text-lg">Level {company?.floor || 1}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1 text-sm">Category</span>
-                <p className="font-medium text-gray-900">{company?.category || 'General'}</p>
+              <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                <span className="text-purple-600 block mb-2 text-sm font-semibold">Category</span>
+                <p className="font-bold text-gray-900 text-lg">{company?.category || 'General'}</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <span className="text-gray-500 block mb-1 text-sm">Dimensions</span>
-                <p className="font-medium text-gray-900">{booth.width}" × {booth.height}"</p>
-                <p className="text-xs text-gray-500">
+              <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
+                <span className="text-orange-600 block mb-2 text-sm font-semibold">Dimensions</span>
+                <p className="font-bold text-gray-900 text-lg">{booth.width}" × {booth.height}"</p>
+                <p className="text-sm text-gray-600 mt-1">
                   {Math.round(booth.width * 0.0254 * 10) / 10}m × {Math.round(booth.height * 0.0254 * 10) / 10}m
                 </p>
               </div>
@@ -159,20 +159,20 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
           {company?.contact && (
             <div className="professional-popup-section">
               <h4 className="professional-popup-section-title">
-                <FontAwesomeIcon icon="fas fa-address-book" size={16} className="text-purple-500" />
+                <FontAwesomeIcon icon="fas fa-address-book" size={18} className="text-purple-500" />
                 Contact Information
               </h4>
               <div className="space-y-2">
                 {company.contact.phone && (
                   <div className="professional-contact-item">
                     <div className="professional-contact-icon phone">
-                      <FontAwesomeIcon icon="fas fa-phone" size={14} />
+                      <FontAwesomeIcon icon="fas fa-phone" size={16} />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="text-sm text-blue-600 font-semibold">Phone</p>
                       <a 
                         href={`tel:${company.contact.phone}`}
-                        className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                        className="font-bold text-gray-900 hover:text-blue-600 transition-colors text-base"
                       >
                         {company.contact.phone}
                       </a>
@@ -182,13 +182,13 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
                 {company.contact.email && (
                   <div className="professional-contact-item">
                     <div className="professional-contact-icon email">
-                      <FontAwesomeIcon icon="fas fa-envelope" size={14} />
+                      <FontAwesomeIcon icon="fas fa-envelope" size={16} />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="text-sm text-green-600 font-semibold">Email</p>
                       <a 
                         href={`mailto:${company.contact.email}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-bold text-blue-600 hover:underline text-base"
                       >
                         {company.contact.email}
                       </a>
@@ -198,15 +198,15 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
                 {(company.contact.website || company.website) && (
                   <div className="professional-contact-item">
                     <div className="professional-contact-icon website">
-                      <FontAwesomeIcon icon="fas fa-globe" size={14} />
+                      <FontAwesomeIcon icon="fas fa-globe" size={16} />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Website</p>
+                      <p className="text-sm text-purple-600 font-semibold">Website</p>
                       <a 
                         href={company.contact.website || company.website} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-bold text-blue-600 hover:underline text-base"
                       >
                         {(company.contact.website || company.website)?.replace(/^https?:\/\//, '')}
                       </a>
@@ -224,12 +224,12 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
                 onClick={() => window.open(company.contact?.website || company.website, '_blank')}
                 className="professional-button primary"
               >
-                <FontAwesomeIcon icon="fas fa-external-link-alt" size={14} />
+                <FontAwesomeIcon icon="fas fa-external-link-alt" size={16} />
                 Visit Website
               </button>
             ) : (
               <button className="professional-button primary">
-                <FontAwesomeIcon icon="fas fa-info-circle" size={14} />
+                <FontAwesomeIcon icon="fas fa-info-circle" size={16} />
                 More Info
               </button>
             )}
@@ -238,7 +238,7 @@ export const ProfessionalBoothPopup: React.FC<ProfessionalBoothPopupProps> = ({
                 onClick={() => window.open(`mailto:${company.contact?.email}`, '_blank')}
                 className="professional-button secondary"
               >
-                <FontAwesomeIcon icon="fas fa-envelope" size={14} />
+                <FontAwesomeIcon icon="fas fa-envelope" size={16} />
                 Contact
               </button>
             )}

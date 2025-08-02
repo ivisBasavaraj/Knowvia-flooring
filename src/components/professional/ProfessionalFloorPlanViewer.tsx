@@ -613,25 +613,25 @@ export const ProfessionalFloorPlanViewer: React.FC = () => {
           {/* Floor Navigation */}
           <div className="professional-panel-section">
             <h3 className="professional-panel-title">
-              <FontAwesomeIcon icon="fas fa-building" size={16} className="text-blue-500" />
-              Floor Navigation
+              <FontAwesomeIcon icon="fas fa-building" size={18} className="text-blue-500" />
+              Floor Levels
             </h3>
             <div className="space-y-2">
               <button
                 onClick={() => setSelectedFloor(1)}
                 className={`w-full p-3 rounded-lg border-2 transition-all duration-200 text-left ${
                   selectedFloor === 1
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700'
+                    ? 'floor-nav-button active'
+                    : 'floor-nav-button'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Ground Floor</div>
-                    <div className="text-sm text-gray-500">Level 1</div>
+                    <div className="font-semibold">Ground Floor</div>
+                    <div className="text-sm opacity-75">Level 1</div>
                   </div>
                   {selectedFloor === 1 && (
-                    <FontAwesomeIcon icon="fas fa-check-circle" size={16} className="text-blue-500" />
+                    <FontAwesomeIcon icon="fas fa-check-circle" size={18} />
                   )}
                 </div>
               </button>
@@ -639,17 +639,17 @@ export const ProfessionalFloorPlanViewer: React.FC = () => {
                 onClick={() => setSelectedFloor(2)}
                 className={`w-full p-3 rounded-lg border-2 transition-all duration-200 text-left ${
                   selectedFloor === 2
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700'
+                    ? 'floor-nav-button active'
+                    : 'floor-nav-button'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Second Floor</div>
-                    <div className="text-sm text-gray-500">Level 2</div>
+                    <div className="font-semibold">Second Floor</div>
+                    <div className="text-sm opacity-75">Level 2</div>
                   </div>
                   {selectedFloor === 2 && (
-                    <FontAwesomeIcon icon="fas fa-check-circle" size={16} className="text-blue-500" />
+                    <FontAwesomeIcon icon="fas fa-check-circle" size={18} />
                   )}
                 </div>
               </button>
@@ -659,34 +659,34 @@ export const ProfessionalFloorPlanViewer: React.FC = () => {
           {/* Legend */}
           <div className="professional-panel-section">
             <h3 className="professional-panel-title">
-              <FontAwesomeIcon icon="fas fa-info-circle" size={16} className="text-green-500" />
+              <FontAwesomeIcon icon="fas fa-info-circle" size={18} className="text-green-500" />
               Legend
             </h3>
             <div className="space-y-1">
               <div className="professional-legend-item">
                 <div className="flex items-center">
-                  <div className="professional-legend-color bg-green-500"></div>
+                  <div className="professional-legend-color" style={{ backgroundColor: '#28a745' }}></div>
                   <span className="professional-legend-label">Available Booths</span>
                 </div>
                 <span className="professional-legend-count">{stats.available}</span>
               </div>
               <div className="professional-legend-item">
                 <div className="flex items-center">
-                  <div className="professional-legend-color bg-blue-500"></div>
+                  <div className="professional-legend-color" style={{ backgroundColor: '#007BFF' }}></div>
                   <span className="professional-legend-label">Occupied Booths</span>
                 </div>
                 <span className="professional-legend-count">{stats.occupied}</span>
               </div>
               <div className="professional-legend-item">
                 <div className="flex items-center">
-                  <div className="professional-legend-color bg-orange-500"></div>
+                  <div className="professional-legend-color" style={{ backgroundColor: '#ffc107' }}></div>
                   <span className="professional-legend-label">Reserved Booths</span>
                 </div>
                 <span className="professional-legend-count">{stats.reserved}</span>
               </div>
               <div className="professional-legend-item">
                 <div className="flex items-center">
-                  <div className="professional-legend-color bg-pink-500"></div>
+                  <div className="professional-legend-color" style={{ backgroundColor: '#C3A4FF' }}></div>
                   <span className="professional-legend-label">Featured Companies</span>
                 </div>
                 <span className="professional-legend-count">{stats.featured}</span>
@@ -712,25 +712,25 @@ export const ProfessionalFloorPlanViewer: React.FC = () => {
           {/* Quick Stats */}
           <div className="professional-panel-section">
             <h3 className="professional-panel-title">
-              <FontAwesomeIcon icon="fas fa-chart-bar" size={16} className="text-purple-500" />
+              <FontAwesomeIcon icon="fas fa-chart-bar" size={18} className="text-purple-500" />
               Quick Stats
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-                <div className="text-xs text-blue-500 font-medium">Total Booths</div>
+              <div className="stat-card available">
+                <div className="stat-number">{stats.total}</div>
+                <div className="stat-label">Total Booths</div>
               </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{stats.available}</div>
-                <div className="text-xs text-green-500 font-medium">Available</div>
+              <div className="stat-card occupied">
+                <div className="stat-number">{stats.available}</div>
+                <div className="stat-label">Available</div>
               </div>
-              <div className="text-center p-3 bg-orange-50 rounded-lg">
-                <div className="text-2xl font-bold text-orange-600">{stats.reserved}</div>
-                <div className="text-xs text-orange-500 font-medium">Reserved</div>
+              <div className="stat-card reserved">
+                <div className="stat-number">{stats.reserved}</div>
+                <div className="stat-label">Reserved</div>
               </div>
-              <div className="text-center p-3 bg-pink-50 rounded-lg">
-                <div className="text-2xl font-bold text-pink-600">{stats.featured}</div>
-                <div className="text-xs text-pink-500 font-medium">Featured</div>
+              <div className="stat-card featured">
+                <div className="stat-number">{stats.featured}</div>
+                <div className="stat-label">Featured</div>
               </div>
             </div>
           </div>
@@ -740,7 +740,7 @@ export const ProfessionalFloorPlanViewer: React.FC = () => {
       {/* Mobile Overlay */}
       {isMobile && !sidebarCollapsed && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-60 z-40 backdrop-blur-sm"
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
